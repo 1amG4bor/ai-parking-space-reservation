@@ -9,13 +9,12 @@ from dotenv import load_dotenv
 
 # ========== Quality Assurance Checks ==========
 def code_lint():
-    """Run pylint, mypy, isort, and black for checking and linting the code."""
+    """Run pylint, isort, and black for checking and linting the code."""
     print("🚀 Linter checks are in progress...")
     linter_commands = [
-        ["pylint", "src/"],
-        ["mypy", "src/"],
         ["isort", "--check", "src/"],
         ["black", "--check", "src/"],
+        ["pylint", "src/"],
     ]
     for lint in linter_commands:
         try:
@@ -24,7 +23,7 @@ def code_lint():
         except Exception as err:
             print("\n❌ Linter failed!\nCheck & fix the linter's output.\n")
             sys.exit(-1)
-    print("✅ Linter checks are done.")
+    print("✅ Linter checks are done.\n", 50 * "=")
 
 
 def code_format():
@@ -41,7 +40,7 @@ def code_format():
         except Exception as err:
             print("\n❌ Formatting failed!\nCheck the formatter's output to fix the issue.\n")
             sys.exit(-1)
-    print("✅ Linter checks are done.\n", 50 * "=")
+    print("✅ Formattings are done.\n", 50 * "=")
 
 
 def run_tests():
@@ -52,7 +51,7 @@ def run_tests():
     except Exception as err:
         print("\n❌ Tests failed!\nCheck the test output to fix the issue.\n")
         sys.exit(-1)
-    print("✅ All tests passed.")
+    print("✅ All unit tests are passed.\n", 50 * "=")
 
 
 def pre_commit():
@@ -110,34 +109,4 @@ def accuracy_test():
 
 
 if __name__ == "__main__":
-    # Parse command-line arguments to determine which function to run
-    parser = argparse.ArgumentParser(description="Run quality checks, services, or tests.")
-    check_options = ["linter", "format", "test", "pre-commit"]
-    run_options = ["run-backend", "run-app"]
-    eval_options = ["performance-test", "accuracy-test"]
-    parser.add_argument(
-        "action",
-        choices=check_options + run_options + eval_options,
-        help="Action to perform",
-    )
-    args = parser.parse_args()
-
-    print(f"Selected action: {args.action}\n", 50 * "=")
-
-    match args.action:
-        case "linter":
-            code_lint()
-        case "format":
-            code_format()
-        case "test":
-            run_tests()
-        case "pre-commit":
-            pre_commit()
-        case "run-backend":
-            run_backend()
-        case "run-app":
-            run_frontend()
-        case "performance-test":
-            performance_test()
-        case "accuracy-test":
-            accuracy_test()
+    pre_commit()

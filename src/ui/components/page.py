@@ -10,8 +10,9 @@ chat_defaults = {
     "chat_history": [],
 }
 
-for id, message in chat_defaults.items():
-    st.session_state.setdefault(id, message)
+for role_id, message in chat_defaults.items():
+    st.session_state.setdefault(role_id, message)
+
 
 def page_setup():
     """Set up the Streamlit page configuration."""
@@ -24,7 +25,7 @@ def page_setup():
 
     # Sidebar settings
     st.sidebar.header("Settings")
-    DESTINATION = st.sidebar.text_input(
+    _user_destination = st.sidebar.text_input(
         "Enter your target destination:",
         value="",
         placeholder="e.g., Budapest Airport, Train Station",

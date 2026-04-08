@@ -1,11 +1,10 @@
 import streamlit as st
 
-from chat_engine.engine import ChatEngine
-from chat_engine.models.response import ResponseStatus, HUMAN_IN_THE_LOOP_STATUSES
+from chat_engine.engine import ChatEngine  # pylint: disable=no-name-in-module
+from chat_engine.models.response import HUMAN_IN_THE_LOOP_STATUSES, ResponseStatus
 from ui import callback
-from ui.constants import Avatar
 from ui.components.page import page_setup
-
+from ui.constants import Avatar
 
 CHAT = ChatEngine()
 APP_STATE = {"chunks": [], "reservation_data": {}}
@@ -34,12 +33,11 @@ if prompt := st.chat_input("Ask me anything about parking reservations:"):
         st.markdown(prompt, unsafe_allow_html=True)
         st.session_state.chat_history.append(msg)
 
-    
     with st.chat_message("assistant", avatar=Avatar.AI.value):
         status_bar = st.status(label="Thinking...", state="running", expanded=False)
         msg_placeholder = st.empty()
         full_formatted_msg = ""  # Accumulator for the full response content
-        
+
         try:
             # Streaming response handling
             stream_response = CHAT.stream_chat(prompt, st.session_state.chat_history)
@@ -49,18 +47,17 @@ if prompt := st.chat_input("Ask me anything about parking reservations:"):
                     new_status = chunk.status.value
                     is_complete = chunk.status in HUMAN_IN_THE_LOOP_STATUSES
                     status_bar.update(label=chunk.status.value, state="complete" if is_complete else "running")
-                
+
                 # Display and store the response chunks
                 if hasattr(chunk, "content") and chunk.content:
                     formatted_chunk = callback.display_content(chunk.content)
                     full_formatted_msg += formatted_chunk
-        except Exception as error:
+        except Exception as error:  # pylint: disable=broad-except
             st.error(f"An error occurred while processing your request: {error}")
             st.write(st.session_state.error)
-            
 
         if full_formatted_msg:
             st.session_state.chat_history.append({"role": Avatar.AI.value, "content": full_formatted_msg})
-        
+
         if status_bar.label == ResponseStatus.STOP.value:
             status_bar.update(label="Done", state="complete", expanded=False)

@@ -9,14 +9,12 @@ class Singleton(type):
     _lock = Lock()
 
     def __call__(cls, *args, **kwargs):
-        cls._lock.acquire()
-        try:
-            if cls not in cls._type_instances:
-                instance = super(Singleton, cls).__call__(*args, **kwargs)
-                cls._type_instances[cls] = instance
-        except Exception as err:
-            logger.error(f"Error occurred while creating singleton instance for {cls.__name__}: {err}")
-        finally:
-            cls._lock.release()
+        with cls._lock:
+            try:
+                if cls not in cls._type_instances:
+                    instance = super(Singleton, cls).__call__(*args, **kwargs)
+                    cls._type_instances[cls] = instance
+            except Exception as err:  # pylint: disable=broad-except
+                logger.error(f"Error occurred while creating singleton instance for {cls.__name__}: {err}")
 
         return cls._type_instances[cls]

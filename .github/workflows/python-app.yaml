@@ -1,0 +1,37 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+
+name: AI Parking Space Reservation
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.13"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install uv
+        uv sync --group dev
+    - name: Lint with isort, black and pylint
+      run: |
+        # Stop the build if there are any errors identified by isort, black or pylint
+        uv run linter
+        
+    - name: Test with pytest
+      run: |
+        uv run unit_test

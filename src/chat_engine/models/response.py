@@ -12,7 +12,9 @@ class ResponseStatus(Enum):
     CONFIRMATION = "Could you please confirm your reservation details?"
     STOP = "Conversation finished."
 
+
 HUMAN_IN_THE_LOOP_STATUSES = {ResponseStatus.REQUEST, ResponseStatus.CONFIRMATION}
+
 
 class ChatResponse(BaseModel):
     """Model representing the AI response"""
@@ -20,6 +22,6 @@ class ChatResponse(BaseModel):
     content: str = Field(default="", description="The content of the AI response")
     status: ResponseStatus = Field(
         default=None,
-        description="The status of the response, the next step that the UI will take or STOP if the conversation is finished",
+        description="Describe the next step that the AI will take to fulfill the user's request.",
     )
     metadata: dict = Field(default_factory=dict, description="Additional metadata related to the response")
