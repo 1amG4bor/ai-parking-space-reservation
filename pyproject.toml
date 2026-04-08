@@ -1,0 +1,53 @@
+[project]
+name = "ai-parking-space-reservation"
+version = "0.1.0"
+description = "This is an Agentic RAG chatbot that handle parking reservation with AI assistance."
+readme = "README.md"
+requires-python = ">=3.12, <3.14"
+dependencies = [
+    "langchain>=1.2.13",
+    "langchain-community>=0.4.1",
+    "langchain-core>=1.2.21",
+    "langchain-openai>=1.1.12",
+    "python-dotenv>=1.2.2",
+    "streamlit>=1.55.0",
+]
+
+
+[dependency-groups]
+dev = [
+    "black>=26.3.1",
+    "isort>=8.0.1",
+    "mypy>=1.19.1",
+    "pylint>=4.0.5",
+    "pytest>=9.0.2",
+]
+
+
+# Build setup
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+sources = ["src"]
+packages = ["src/ui", "src/chat_engine", "cicd"]
+
+
+# Utility scripts 
+[project.scripts]
+# Quality checks
+linter = "cicd.scripts:code_lint"
+code_format = "cicd.scripts:code_format"
+unit_test = "cicd.scripts:run_tests"
+pre_commit = "cicd.scripts:pre_commit"
+# Running the application
+backend = "cicd.scripts:run_backend"
+app = "cicd.scripts:run_frontend"
+# Running evaluation
+performance_test = "cicd.scripts:performance_test"
+accuracy_test = "cicd.scripts:accuracy_test"
+
+[tool.black]
+line-length = 120
+target-version = ["py312"]

@@ -1,0 +1,17 @@
+# Python-generated cache and distribution files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Local DEV configs and virtual environments
+.python-version
+*venv/
+.venv
+
+# IDE files
+.vscode/
+.idea/
+
