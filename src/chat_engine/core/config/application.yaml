@@ -1,0 +1,14 @@
+# Agent configuration
+RESERVATION_AGENT_MODEL: gpt-5-nano
+AGENT_MAX_HISTORY: 10
+AGENT_TEMPERATURE: 0.05
+AGENT_MAX_DOCUMENTS: 5
+
+# Retrieval configuration
+RETRIEVAL_API_ENDPOINT: http://olama:11434
+RETRIEVAL_MODEL: llama3.2
+RETRIEVAL_TOP_K: 5
+
+# Database configuration
+DATABASE_DRIVER: postgresql
+DATABASE_PORT: 5432
