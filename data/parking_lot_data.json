@@ -1,0 +1,1599 @@
+[
+    {
+        "parking_lot_id": "HU-BUD-001",
+        "name": "Liszt Airport Park & Go",
+        "description": "Conveniently located adjacent to Budapest Liszt Ferenc International Airport Terminal 2, this open-air parking lot offers quick shuttle service to the terminals, 24/7 security, and easy access for travelers.",
+        "type": "Open-air",
+        "features": [
+            "24/7 security",
+            "shuttle service",
+            "EV charging",
+            "handicap accessible"
+        ],
+        "restrictions": [
+            "No trucks",
+            "Max height 2.2m"
+        ],
+        "amenities": [
+            "Car wash",
+            "Luggage assistance"
+        ],
+        "capacity": {
+            "general": 500
+        },
+        "price": {
+            "general": 3500
+        },
+        "address": "1185 Budapest, Ferihegy Airport Terminal 2",
+        "coordinate": [
+            47.4296,
+            19.2616
+        ],
+        "operating_hours": {
+            "open": "00:00",
+            "close": "23:59"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KELETI-002",
+        "name": "Keleti Station Multi-storey Parking",
+        "description": "Modern multi-storey parking facility directly at Budapest Keleti Railway Station, ideal for commuters and travelers. Offers covered parking, security cameras, and EV charging points.",
+        "type": "Multi-storey",
+        "features": [
+            "Security cameras",
+            "EV charging",
+            "Handicap accessible",
+            "Elevator"
+        ],
+        "restrictions": [
+            "Max height 2.1m",
+            "No LPG vehicles"
+        ],
+        "amenities": [
+            "Valet parking",
+            "Car detailing"
+        ],
+        "capacity": {
+            "underground": 200,
+            "ground": 100,
+            "multi_storey": 400
+        },
+        "price": {
+            "underground": 4500,
+            "ground": 3500,
+            "multi_storey": 4000
+        },
+        "address": "1077 Budapest, Baross tér 11.",
+        "coordinate": [
+            47.5007,
+            19.0821
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-DEB-003",
+        "name": "Debrecen Airport Express Parking",
+        "description": "Located just steps from Debrecen International Airport, this ground-level parking lot is perfect for short and long-term stays, featuring 24-hour access and security.",
+        "type": "Ground-level",
+        "features": [
+            "24/7 access",
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No buses",
+            "Max height 2.3m"
+        ],
+        "amenities": [
+            "Luggage carts"
+        ],
+        "capacity": {
+            "general": 150
+        },
+        "price": {
+            "general": 2500
+        },
+        "address": "4030 Debrecen, Mikepércsi út 49.",
+        "coordinate": [
+            47.4889,
+            21.6158
+        ],
+        "operating_hours": {
+            "open": "00:00",
+            "close": "23:59"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-NEPLIGET-004",
+        "name": "Népliget Bus Terminal Parking",
+        "description": "Spacious open-air parking lot serving Budapest's main bus terminal, with easy access to intercity and international buses. Offers affordable rates and basic amenities.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight camping",
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 300
+        },
+        "price": {
+            "general": 1800
+        },
+        "address": "1101 Budapest, Könyves Kálmán krt. 16.",
+        "coordinate": [
+            47.4771,
+            19.1082
+        ],
+        "operating_hours": {
+            "open": "04:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-GYOR-005",
+        "name": "Győr Central Station Parking",
+        "description": "Located next to Győr’s main railway station, this underground parking lot provides safe and convenient parking for commuters and travelers, with modern security and EV charging.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "EV charging",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Bike storage"
+        ],
+        "capacity": {
+            "general": 220
+        },
+        "price": {
+            "general": 2200
+        },
+        "address": "9021 Győr, Révai Miklós utca 2.",
+        "coordinate": [
+            47.6875,
+            17.6346
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "23:59"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-NYUGATI-006",
+        "name": "Nyugati Station Underground Parking",
+        "description": "Underground parking facility beneath Nyugati Railway Station, offering direct access to platforms, high security, and premium services for travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.1m"
+        ],
+        "amenities": [
+            "Car wash",
+            "Luggage storage"
+        ],
+        "capacity": {
+            "general": 350
+        },
+        "price": {
+            "general": 4000
+        },
+        "address": "1067 Budapest, Teréz körút 55.",
+        "coordinate": [
+            47.5101,
+            19.0561
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:59"
+        }
+    },
+    {
+        "parking_lot_id": "HU-MISKOLC-007",
+        "name": "Miskolc Bus Terminal Parking",
+        "description": "Open-air parking lot adjacent to Miskolc’s main bus terminal, ideal for travelers and commuters. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 120
+        },
+        "price": {
+            "general": 1200
+        },
+        "address": "3525 Miskolc, Búza tér 1.",
+        "coordinate": [
+            48.1046,
+            20.7901
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-SZEGED-008",
+        "name": "Szeged Railway Station Parking",
+        "description": "Ground-level parking lot next to Szeged’s main train station, offering easy access for travelers and commuters, with security and EV charging.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "EV charging",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "Max height 2.2m"
+        ],
+        "amenities": [
+            "Bike storage"
+        ],
+        "capacity": {
+            "general": 180
+        },
+        "price": {
+            "general": 1700
+        },
+        "address": "6725 Szeged, Indóház tér 2.",
+        "coordinate": [
+            46.2530,
+            20.1482
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KOSZTOLANYI-009",
+        "name": "Kosztolányi Square Bus Hub Parking",
+        "description": "Open-air parking lot at Kosztolányi Dezső Square, serving Budapest’s busy bus hub. Offers affordable rates and basic amenities for daily commuters.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 90
+        },
+        "price": {
+            "general": 1100
+        },
+        "address": "1117 Budapest, Kosztolányi Dezső tér",
+        "coordinate": [
+            47.4732,
+            19.0457
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-PECS-010",
+        "name": "Pécs Central Station Parking",
+        "description": "Multi-storey parking facility at Pécs Central Railway Station, offering covered parking, security, and EV charging for travelers and commuters.",
+        "type": "Multi-storey",
+        "features": [
+            "Security cameras",
+            "EV charging",
+            "Handicap accessible",
+            "Elevator"
+        ],
+        "restrictions": [
+            "Max height 2.1m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "ground": 100,
+            "multi_storey": 300
+        },
+        "price": {
+            "ground": 1800,
+            "multi_storey": 2200
+        },
+        "address": "7621 Pécs, Indóház tér 1.",
+        "coordinate": [
+            46.0727,
+            18.2321
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KELENFOLD-011",
+        "name": "Kelenföld Station Park & Ride",
+        "description": "Large open-air parking lot at Kelenföld Railway Station, ideal for park & ride commuters. Offers EV charging, security, and easy access to metro lines.",
+        "type": "Open-air",
+        "features": [
+            "EV charging",
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trucks"
+        ],
+        "amenities": [
+            "Bike storage"
+        ],
+        "capacity": {
+            "general": 400
+        },
+        "price": {
+            "general": 2000
+        },
+        "address": "1119 Budapest, Etele tér",
+        "coordinate": [
+            47.4637,
+            19.0272
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-DEB-012",
+        "name": "Debrecen Bus Terminal Parking",
+        "description": "Open-air parking lot at Debrecen’s main bus terminal, offering affordable rates and basic amenities for travelers and commuters.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 100
+        },
+        "price": {
+            "general": 1200
+        },
+        "address": "4025 Debrecen, Széchenyi utca 1.",
+        "coordinate": [
+            47.5316,
+            21.6246
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ORCZY-013",
+        "name": "Orczy Square Metro Parking",
+        "description": "Ground-level parking lot at Orczy Square, serving metro and tram commuters. Offers security cameras and basic amenities.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 80
+        },
+        "price": {
+            "general": 1000
+        },
+        "address": "1089 Budapest, Orczy tér",
+        "coordinate": [
+            47.4852,
+            19.0857
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-FOGASKEREKU-014",
+        "name": "Fogaskerekű Railway Parking",
+        "description": "Open-air parking lot at the Fogaskerekű Railway terminus, ideal for tourists and commuters heading to the Buda hills.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No buses"
+        ],
+        "amenities": [
+            "Bike storage"
+        ],
+        "capacity": {
+            "general": 60
+        },
+        "price": {
+            "general": 900
+        },
+        "address": "1121 Budapest, Városmajor utca 1.",
+        "coordinate": [
+            47.5078,
+            19.0201
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "21:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-MARGITSZIGET-015",
+        "name": "Margitsziget Bus Terminal Parking",
+        "description": "Open-air parking lot at the entrance to Margaret Island, serving bus terminal and recreational visitors. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 70
+        },
+        "price": {
+            "general": 1100
+        },
+        "address": "1138 Budapest, Margitsziget",
+        "coordinate": [
+            47.5282,
+            19.0456
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-OBUDA-016",
+        "name": "Óbuda Train Station Parking",
+        "description": "Ground-level parking lot at Óbuda Train Station, offering easy access for commuters and travelers, with security and EV charging.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "EV charging",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "Max height 2.2m"
+        ],
+        "amenities": [
+            "Bike storage"
+        ],
+        "capacity": {
+            "general": 120
+        },
+        "price": {
+            "general": 1300
+        },
+        "address": "1036 Budapest, Szentlélek tér",
+        "coordinate": [
+            47.5392,
+            19.0347
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KALVIN-017",
+        "name": "Kálvin Square Metro Parking",
+        "description": "Underground parking facility at Kálvin Square, offering direct access to metro lines and high security for commuters and travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 200
+        },
+        "price": {
+            "general": 2500
+        },
+        "address": "1091 Budapest, Kálvin tér",
+        "coordinate": [
+            47.4891,
+            19.0611
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ARANYJANOS-018",
+        "name": "Arany János Street Metro Parking",
+        "description": "Ground-level parking lot at Arany János Street Metro Station, offering affordable rates and basic amenities for daily commuters.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 60
+        },
+        "price": {
+            "general": 900
+        },
+        "address": "1051 Budapest, Arany János utca",
+        "coordinate": [
+            47.5042,
+            19.0527
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-BATTHYANY-019",
+        "name": "Batthyány Square HÉV Parking",
+        "description": "Open-air parking lot at Batthyány Square, serving HÉV and metro commuters. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 80
+        },
+        "price": {
+            "general": 1100
+        },
+        "address": "1011 Budapest, Batthyány tér",
+        "coordinate": [
+            47.5036,
+            19.0342
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-FERENCIEK-020",
+        "name": "Ferenciek Square Metro Parking",
+        "description": "Underground parking facility at Ferenciek Square, offering direct access to metro lines and high security for commuters and travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 180
+        },
+        "price": {
+            "general": 2400
+        },
+        "address": "1053 Budapest, Ferenciek tere",
+        "coordinate": [
+            47.4945,
+            19.0551
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23: 00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-DEAK-021",
+        "name": "Deák Square Metro Parking",
+        "description": "Underground parking facility at Deák Ferenc Square, offering direct access to three metro lines and high security for commuters and travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 220
+        },
+        "price": {
+            "general": 2600
+        },
+        "address": "1052 Budapest, Deák Ferenc tér",
+        "coordinate": [
+            47.4979,
+            19.0546
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ASTORIA-022",
+        "name": "Astoria Metro Parking",
+        "description": "Underground parking facility at Astoria, offering direct access to metro lines and high security for commuters and travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 160
+        },
+        "price": {
+            "general": 2300
+        },
+        "address": "1088 Budapest, Astoria",
+        "coordinate": [
+            47.4947,
+            19.0612
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-BLAHA-023",
+        "name": "Blaha Lujza Square Metro Parking",
+        "description": "Underground parking facility at Blaha Lujza Square, offering direct access to metro lines and high security for commuters and travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 180
+        },
+        "price": {
+            "general": 2400
+        },
+        "address": "1085 Budapest, Blaha Lujza tér",
+        "coordinate": [
+            47.4972,
+            19.0702
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KOSSUTH-024",
+        "name": "Kossuth Square Metro Parking",
+        "description": "Underground parking facility at Kossuth Lajos Square, offering direct access to metro lines and high security for commuters and travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 140
+        },
+        "price": {
+            "general": 2200
+        },
+        "address": "1055 Budapest, Kossuth Lajos tér",
+        "coordinate": [
+            47.5071,
+            19.0452
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-OKTOGON-025",
+        "name": "Oktogon Metro Parking",
+        "description": "Underground parking facility at Oktogon, offering direct access to metro lines and high security for commuters and travelers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 200
+        },
+        "price": {
+            "general": 2500
+        },
+        "address": "1066 Budapest, Oktogon",
+        "coordinate": [
+            47.5058,
+            19.0622
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KALVARIA-026",
+        "name": "Kálvária Square Tram Hub Parking",
+        "description": "Open-air parking lot at Kálvária Square, serving tram and bus commuters. Offers affordable rates and basic amenities for daily travelers.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 70
+        },
+        "price": {
+            "general": 1000
+        },
+        "address": "1089 Budapest, Kálvária tér",
+        "coordinate": [
+            47.4898,
+            19.0892
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-LEHEL-027",
+        "name": "Lehel Square Metro Parking",
+        "description": "Underground parking facility at Lehel Square, offering direct access to metro lines and high security for commuters and shoppers.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 150
+        },
+        "price": {
+            "general": 2100
+        },
+        "address": "1134 Budapest, Lehel tér",
+        "coordinate": [
+            47.5202,
+            19.0617
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-NEWMARKET-028",
+        "name": "New Market Hall Parking",
+        "description": "Multi-storey parking facility next to Budapest's Great Market Hall, ideal for shoppers and tram commuters. Offers covered parking and security.",
+        "type": "Multi-storey",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "Elevator"
+        ],
+        "restrictions": [
+            "Max height 2.1m"
+        ],
+        "amenities": [
+            "Valet parking"
+        ],
+        "capacity": {
+            "ground": 80,
+            "multi_storey": 220
+        },
+        "price": {
+            "ground": 1800,
+            "multi_storey": 2100
+        },
+        "address": "1093 Budapest, Vámház körút 1-3.",
+        "coordinate": [
+            47.4867,
+            19.0586
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-OROKKIVALOSAG-029",
+        "name": "Örökkévalóság Square Bus Terminal Parking",
+        "description": "Open-air parking lot at Örökkévalóság Square, serving local and intercity bus travelers. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 60
+        },
+        "price": {
+            "general": 900
+        },
+        "address": "1102 Budapest, Örökkévalóság tér",
+        "coordinate": [
+            47.4951,
+            19.1203
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ALOMSZIRNAK-030",
+        "name": "Álomszírnák Square Metro Parking",
+        "description": "Underground parking facility at Álomszírnák Square, offering direct access to metro lines and high security for commuters.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 120
+        },
+        "price": {
+            "general": 2000
+        },
+        "address": "1082 Budapest, Álomszírnák tér",
+        "coordinate": [
+            47.4923,
+            19.0701
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-NEPSZINHAZ-031",
+        "name": "Népszínház Street Tram Parking",
+        "description": "Ground-level parking lot at Népszínház Street, serving tram and bus commuters. Offers affordable rates and basic amenities.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 50
+        },
+        "price": {
+            "general": 800
+        },
+        "address": "1081 Budapest, Népszínház utca",
+        "coordinate": [
+            47.4975,
+            19.0763
+        ],
+        "operating_hours": {
+            "open": "05: 00",
+            "close": "22: 00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-BAJCSY-032",
+        "name": "Bajcsy-Zsilinszky Road Metro Parking",
+        "description": "Underground parking facility at Bajcsy-Zsilinszky Road, offering direct access to metro lines and high security for commuters.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 140
+        },
+        "price": {
+            "general": 2100
+        },
+        "address": "1054 Budapest, Bajcsy-Zsilinszky út",
+        "coordinate": [
+            47.5047,
+            19.0536
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KAROLYI-033",
+        "name": "Károlyi Garden Parking",
+        "description": "Ground-level parking lot near Károlyi Garden, ideal for visitors and commuters. Offers security cameras and basic amenities.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 40
+        },
+        "price": {
+            "general": 700
+        },
+        "address": "1053 Budapest, Károlyi utca",
+        "coordinate": [
+            47.4928,
+            19.0559
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "21:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-CLARKADAM-034",
+        "name": "Clark Ádám Square Parking",
+        "description": "Open-air parking lot at Clark Ádám Square, serving tram and bus commuters as well as tourists visiting the Buda Castle area.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 60
+        },
+        "price": {
+            "general": 1200
+        },
+        "address": "1013 Budapest, Clark Ádám tér",
+        "coordinate": [
+            47.4971,
+            19.0407
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-MOSZKVA-035",
+        "name": "Széll Kálmán Square Metro Parking",
+        "description": "Underground parking facility at Széll Kálmán Square, offering direct access to metro, tram, and bus lines with high security.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 180
+        },
+        "price": {
+            "general": 2300
+        },
+        "address": "1024 Budapest, Széll Kálmán tér",
+        "coordinate": [
+            47.5076,
+            19.0247
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-MOM-036",
+        "name": "MOM Park Bus Terminal Parking",
+        "description": "Multi-storey parking facility at MOM Park, serving bus terminal and shopping center visitors. Offers covered parking and security.",
+        "type": "Multi-storey",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "Elevator"
+        ],
+        "restrictions": [
+            "Max height 2.1m"
+        ],
+        "amenities": [
+            "Valet parking"
+        ],
+        "capacity": {
+            "ground": 60,
+            "multi_storey": 180
+        },
+        "price": {
+            "ground": 1700,
+            "multi_storey": 2000
+        },
+        "address": "1123 Budapest, Alkotás utca 53.",
+        "coordinate": [
+            47.4912,
+            19.0241
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-NEWMETRO-037",
+        "name": "New Metro Terminal Parking",
+        "description": "Open-air parking lot at the new metro terminal, serving commuters and travelers. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 90
+        },
+        "price": {
+            "general": 1100
+        },
+        "address": "1106 Budapest, Metro Terminal",
+        "coordinate": [
+            47.4955,
+            19.1209
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ALBERTFLORENT-038",
+        "name": "Albert Flórián Road Bus Hub Parking",
+        "description": "Ground-level parking lot at Albert Flórián Road, serving bus hub commuters. Offers affordable rates and basic amenities.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 70
+        },
+        "price": {
+            "general": 900
+        },
+        "address": "1097 Budapest, Albert Flórián út",
+        "coordinate": [
+            47.4702,
+            19.0823
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-NEPSZINHAZ-039",
+        "name": "Népszínház Street Bus Terminal Parking",
+        "description": "Open-air parking lot at Népszínház Street, serving bus terminal travelers. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 60
+        },
+        "price": {
+            "general": 900
+        },
+        "address": "1081 Budapest, Népszínház utca",
+        "coordinate": [
+            47.4975,
+            19.0763
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ORCZY-040",
+        "name": "Orczy Square Bus Terminal Parking",
+        "description": "Open-air parking lot at Orczy Square, serving bus terminal travelers. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 70
+        },
+        "price": {
+            "general": 1000
+        },
+        "address": "1089 Budapest, Orczy tér",
+        "coordinate": [
+            47.4852,
+            19.0857
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-RAKOCZI-041",
+        "name": "Rákóczi Square Metro Parking",
+        "description": "Underground parking facility at Rákóczi Square, offering direct access to metro lines and high security for commuters.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 120
+        },
+        "price": {
+            "general": 2000
+        },
+        "address": "1084 Budapest, Rákóczi tér",
+        "coordinate": [
+            47.4921,
+            19.0708
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-FOGARASI-042",
+        "name": "Fogaras Road Bus Terminal Parking",
+        "description": "Open-air parking lot at Fogaras Road, serving bus terminal travelers. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 80
+        },
+        "price": {
+            "general": 1100
+        },
+        "address": "1148 Budapest, Fogarasi út",
+        "coordinate": [
+            47.5112,
+            19.1201
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-BAJZA-043",
+        "name": "Bajza Street Metro Parking",
+        "description": "Underground parking facility at Bajza Street, offering direct access to metro lines and high security for commuters.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 100
+        },
+        "price": {
+            "general": 1800
+        },
+        "address": "1062 Budapest, Bajza utca",
+        "coordinate": [
+            47.5132,
+            19.0702
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-DOHANY-044",
+        "name": "Dohány Street Synagogue Parking",
+        "description": "Ground-level parking lot near Dohány Street Synagogue, ideal for visitors and commuters. Offers security cameras and basic amenities.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 50
+        },
+        "price": {
+            "general": 900
+        },
+        "address": "1074 Budapest, Dohány utca",
+        "coordinate": [
+            47.4979,
+            19.0627
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "21:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ANDRASSY-045",
+        "name": "Andrássy Avenue Metro Parking",
+        "description": "Underground parking facility at Andrássy Avenue, offering direct access to metro lines and high security for commuters.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 130
+        },
+        "price": {
+            "general": 2000
+        },
+        "address": "1061 Budapest, Andrássy út",
+        "coordinate": [
+            47.5046,
+            19.0582
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KIRALY-046",
+        "name": "Király Street Tram Parking",
+        "description": "Ground-level parking lot at Király Street, serving tram commuters and shoppers. Offers affordable rates and basic amenities.",
+        "type": "Ground-level",
+        "features": [
+            "Security cameras",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 60
+        },
+        "price": {
+            "general": 900
+        },
+        "address": "1061 Budapest, Király utca",
+        "coordinate": [
+            47.5021,
+            19.0601
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "21:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-TEREZ-047",
+        "name": "Teréz Boulevard Metro Parking",
+        "description": "Underground parking facility at Teréz Boulevard, offering direct access to metro lines and high security for commuters.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 110
+        },
+        "price": {
+            "general": 1900
+        },
+        "address": "1067 Budapest, Teréz körút",
+        "coordinate": [
+            47.5072,
+            19.0629
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-ULLOI-048",
+        "name": "Üllői Road Metro Parking",
+        "description": "Underground parking facility at Üllői Road, offering direct access to metro lines and high security for commuters.",
+        "type": "Underground",
+        "features": [
+            "Security cameras",
+            "Handicap accessible",
+            "EV charging"
+        ],
+        "restrictions": [
+            "Max height 2.0m"
+        ],
+        "amenities": [
+            "Car wash"
+        ],
+        "capacity": {
+            "general": 120
+        },
+        "price": {
+            "general": 2000
+        },
+        "address": "1091 Budapest, Üllői út",
+        "coordinate": [
+            47.4842,
+            19.0821
+        ],
+        "operating_hours": {
+            "open": "06:00",
+            "close": "23:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-KORUT-049",
+        "name": "Nagykörút Tram Hub Parking",
+        "description": "Open-air parking lot at Nagykörút, serving tram and bus commuters. Offers affordable rates and basic amenities.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No trailers"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 80
+        },
+        "price": {
+            "general": 1100
+        },
+        "address": "1085 Budapest, József körút",
+        "coordinate": [
+            47.4927,
+            19.0709
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    },
+    {
+        "parking_lot_id": "HU-BP-BAJCSY-050",
+        "name": "Bajcsy-Zsilinszky Road Bus Terminal Parking",
+        "description": "Open-air parking lot at Bajcsy-Zsilinszky Road, serving bus terminal travelers. Offers basic amenities and guarded access.",
+        "type": "Open-air",
+        "features": [
+            "Guarded",
+            "Handicap accessible"
+        ],
+        "restrictions": [
+            "No overnight parking"
+        ],
+        "amenities": [
+            "Snack kiosk"
+        ],
+        "capacity": {
+            "general": 70
+        },
+        "price": {
+            "general": 1000
+        },
+        "address": "1054 Budapest, Bajcsy-Zsilinszky út",
+        "coordinate": [
+            47.5047,
+            19.0536
+        ],
+        "operating_hours": {
+            "open": "05:00",
+            "close": "22:00"
+        }
+    }
+]

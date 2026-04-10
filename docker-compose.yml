@@ -1,0 +1,50 @@
+services:
+  # Weaviate vector search engine for storing and retrieving parking-lots related data.
+  weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.36.8
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    ports:
+    - 8080:8080
+    - 50051:50051
+    volumes:
+    - weaviate_data:/var/lib/weaviate
+    restart: on-failure:0
+    environment:
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      ENABLE_MODULES: 'text2vec-ollama,generative-ollama'
+      CLUSTER_HOSTNAME: 'node1'
+      OLLAMA_API_ENDPOINT: 'http://ollama:11434'
+    depends_on:
+      - ollama
+
+  # Ollama API for handling AI model interactions, used for both retrieval and agent reasoning.
+  ollama:
+    image: ollama/ollama:0.12.9
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  # PostgreSQL database for storing user data and reservation data.
+  postgres-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  weaviate_data:
+  ollama_data:
+  postgres_data:

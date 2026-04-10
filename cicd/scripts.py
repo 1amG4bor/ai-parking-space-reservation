@@ -66,7 +66,7 @@ def run_backend():
     """Run the backend services, including SQL database, Vector database, and ChatEngine API."""
     print("🚀 Running the backend service is in progress...")
     try:
-        result = subprocess.run(["docker-compose", "up", "-d", "backend"], check=True)
+        result = subprocess.run(["docker", "compose", "--env-file", ".env", "up"], check=True)
     except Exception as err:
         print("\n❌ Backend run failed!\nCheck the run output to fix the issue.\n")
         sys.exit(-1)
