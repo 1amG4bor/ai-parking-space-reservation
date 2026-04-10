@@ -7,9 +7,11 @@ class ResponseStatus(Enum):
     """Enum representing the status of the AI response, which indicates the next step that the UI should take."""
 
     ANALYZING = "Analyzing the request..."
-    REQUEST = "Please provide additional information."
     SEARCHING = "Finding the best parking options..."
+    REQUEST = "Please provide additional information."
     CONFIRMATION = "Could you please confirm your reservation details?"
+    GENERATING = "Generating the response..."
+    STREAMING = "Streaming the response..."
     STOP = "Conversation finished."
 
 
