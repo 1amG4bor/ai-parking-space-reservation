@@ -7,7 +7,6 @@ from langchain.messages import AIMessage, AIMessageChunk
 from chat_engine.core.utils.patterns import Singleton
 from ui.utils import format_html
 
-from chat_engine.core.config.logging import logger
 
 class StreamlitCallback(metaclass=Singleton):
 
@@ -15,7 +14,6 @@ class StreamlitCallback(metaclass=Singleton):
         self.msg_placeholder = None
         self.last_write_mode = None
         self.full_response = None
-
 
     def display_content(self, message: Any, mode: str, placeholder: Any = None) -> Any:
         msg_type = type(message).__name__
@@ -47,7 +45,7 @@ class StreamlitCallback(metaclass=Singleton):
                 if isinstance(chunk, str):
                     msg_chunks += format_html(chunk)
                 elif isinstance(chunk, (AIMessage, AIMessageChunk)):
-                    msg_chunks = format_html(msg_chunks +chunk.content)
+                    msg_chunks = format_html(msg_chunks + chunk.content)
                 self.msg_placeholder.markdown(format_html(full_response + msg_chunks) + "┃", unsafe_allow_html=True)
 
             formatted_msg = msg_chunks
@@ -55,8 +53,7 @@ class StreamlitCallback(metaclass=Singleton):
             formatted_msg = format_html(message)
             formatted_msg = formatted_msg.replace("\n", "<br>")
             self.msg_placeholder.markdown(format_html(full_response + formatted_msg) + "┃", unsafe_allow_html=True)
-        
-        
+
         self.full_response = full_response + formatted_msg
         self.last_write_mode = mode
 

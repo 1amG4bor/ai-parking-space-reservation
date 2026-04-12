@@ -1,5 +1,7 @@
 from enum import Enum
+
 from chat_engine.models.enums import PreferenceType
+
 
 class Avatar(Enum):
     """Enum representing the avatars"""
@@ -17,5 +19,6 @@ class Avatar(Enum):
             if avatar.name == string.upper():
                 return avatar
         return None
+
 
 parking_preferences = [preference.value for preference in PreferenceType]

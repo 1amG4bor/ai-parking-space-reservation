@@ -1,13 +1,8 @@
-import base64
-import os
-from pathlib import Path
-
 import streamlit as st
 
 from chat_engine.core.utils.db_tool import DatabaseService
-from chat_engine.engine.apsr_chat_engine import ChatEngine
-from ui.constants import Avatar
-from ui.constants import parking_preferences
+from chat_engine.engine.apsr_chat_engine import ChatEngine  # pylint: disable=no-name-in-module
+from ui.constants import Avatar, parking_preferences
 
 
 def page_setup(context: dict = None):
@@ -22,14 +17,12 @@ def page_setup(context: dict = None):
 
     # ========== UI Styling ==========
     chat_input_display_style = "none" if st.session_state.processing is True else "block"
-    st.html(
-        f"""
+    st.html(f"""
 <style>
 .stAppHeader {{ background-color: #559FF2dd; color: white; }}
 .st-key-chat-input {{ display: {chat_input_display_style}; }}
 </style>
-"""
-    )
+""")
 
     # ========== Main page content ==========
     st.title("AI Parking Reservation", anchor="main-title", width="stretch", text_alignment="center")

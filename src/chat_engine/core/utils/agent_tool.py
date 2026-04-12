@@ -1,14 +1,14 @@
-from datetime import datetime, UTC
+# pylint: disable=line-too-long
 import os
 import random
+from datetime import UTC, datetime
 
-from langchain.tools import tool, ToolRuntime
+from fastapi import HTTPException
+from langchain.tools import ToolRuntime, tool
 from tavily import TavilyClient
 
-from chat_engine.core.rag.retriever import ParkingInfoRetriever
 from chat_engine.core.config.logging import logger
-from fastapi import HTTPException
-
+from chat_engine.core.rag.retriever import ParkingInfoRetriever
 from chat_engine.core.utils.db_tool import DatabaseService
 from chat_engine.models.db_entities import ReservationEntity
 from chat_engine.models.enums import ReservationStatus
@@ -28,7 +28,7 @@ def user_info_tool(runtime: ToolRuntime) -> dict:
     Args:
         runtime (ToolRuntime): The runtime context provided by the agent when invoking the tool, which can be used to access relevant information about the user and the conversation.
     """
-    logger.info(f"Getting user preferences.")
+    logger.info("Getting user preferences.")
     username = runtime.context.username
     if not username:
         raise HTTPException(status_code=401, detail="User is not authenticated.")
@@ -68,7 +68,7 @@ def retriever_tool(query: str, top_k: int = 5) -> str:
     try:
         retriever = ParkingInfoRetriever(top_k=top_k)
         parking_info = retriever.retrieve(query)
-        logger.info(f"Retriever tool succeeded.")
+        logger.info("Retriever tool succeeded.")
     except Exception as err:
         logger.error(f"Retriever tool failed: {err}")
         return f"Failed to retrieve parking information. Please try again. Error: {err}"
@@ -144,10 +144,10 @@ def reservation_tool(runtime: ToolRuntime, parking_lot_id: str, category: str, r
         db_service = DatabaseService()
         now = datetime.now(UTC)
         year, month = now.year, now.month
-        id = random.randint(1, 9999)
+        seq_id = random.randint(1, 9999)
         reservation_data = ReservationEntity(
             vehicle_id=selected_vehicle_id,
-            reservation_id=f"res_hu_{month}{year}_{id}",
+            reservation_id=f"res_hu_{month}{year}_{seq_id}",
             reservation_time=now,
             parking_lot_id=parking_lot_id,
             parking_space_category=category,
@@ -184,7 +184,7 @@ def database_tool(query: str) -> str:
     try:
         db_service = DatabaseService()
         result = db_service.execute_query(query)
-        logger.info(f"Database query executed successfully.")
+        logger.info("Database query executed successfully.")
         return result
     except Exception as err:
         logger.warning(f"Database tool failed: {err}")

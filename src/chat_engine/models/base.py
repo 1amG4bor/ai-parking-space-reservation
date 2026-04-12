@@ -1,8 +1,8 @@
 """Module for representing database entities and models."""
 
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, RelationshipProperty
 from datetime import datetime, timezone
 
+from sqlalchemy.orm import DeclarativeBase, Mapped, RelationshipProperty, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -20,15 +20,15 @@ class Base(DeclarativeBase):
         # Separate relationship data from plain column data
         relationship_data = {}
         column_data = {}
-        
+
         # Get all defined relationships for this class
         mapper = cls.__mapper__
-        
+
         for key, value in data.items():
             if key in mapper.relationships:
                 rel_property: RelationshipProperty = mapper.relationships[key]
                 target_class = rel_property.mapper.class_
-                
+
                 # Convert dict(s) to entity object(s)
                 if isinstance(value, list):
                     relationship_data[key] = [target_class.from_dict(i) for i in value]
@@ -38,6 +38,3 @@ class Base(DeclarativeBase):
                 column_data[key] = value
 
         return cls(**column_data, **relationship_data)
-
-
-

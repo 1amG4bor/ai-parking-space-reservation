@@ -1,22 +1,21 @@
 """This is the DEV UI for testing and development purposes. It is not meant for production use."""
+
 from uuid import uuid4
 
-from dotenv import load_dotenv
 import streamlit as st
+from dotenv import load_dotenv
 
-from chat_engine.models.response import HUMAN_IN_THE_LOOP_STATUSES, ResponseStatus
-
+from chat_engine.models.response import HUMAN_IN_THE_LOOP_STATUSES
 from ui import callback
+from ui.constants import Avatar
 from ui.helper import (
+    disable_chat_input,
+    enable_chat_input,
+    initialize_chat_engine,
     page_setup,
     repaint_message_history,
     setup_defaults,
-    initialize_chat_engine,
-    enable_chat_input,
-    disable_chat_input,
 )
-from ui.constants import Avatar
-
 
 # Mimic authenticated user
 AUTH_CONTEXT = {"authenticated": True, "username": "john.doe"}
@@ -75,7 +74,7 @@ with st.container(border=True, width="stretch", height="stretch", gap="small", k
                 # Streaming response handling
                 stream_response = CHAT.stream_chat(
                     prompt=prompt,
-                    history=st.session_state.chat_history,
+                    history=st.session_state.chat_history[:-1],  # Exclude the current user message from history
                     session_context=st.session_state.session_context,
                 )
                 for chunk in stream_response:

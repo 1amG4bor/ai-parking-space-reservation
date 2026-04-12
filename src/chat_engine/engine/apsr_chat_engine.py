@@ -3,9 +3,9 @@ from types import GeneratorType
 
 from chat_engine.core.agents.agent import ReservationAgent
 from chat_engine.core.agents.guardrail import ModerationGuardrail
+from chat_engine.core.config.logging import logger
 from chat_engine.core.utils.patterns import Singleton
 from chat_engine.models.response import ChatResponse, ResponseStatus
-from chat_engine.core.config.logging import logger
 
 
 class ChatEngine(metaclass=Singleton):
@@ -24,15 +24,15 @@ class ChatEngine(metaclass=Singleton):
             template = "Sorry, we cannot process your request because: '{}'.\n**Suggestion:**\n{}"
             suggestions = "\n".join(guardrail_response.get("suggestions", []))
             error_message = template.format(guardrail_response.get("reason"), suggestions)
-            
+
             yield ChatResponse(content=error_message, status=ResponseStatus.BLOCKED)
             return
-        
+
         yield ChatResponse(status=ResponseStatus.SEARCHING)
 
         stream_response = self.agent.invoke(prompt=prompt, history=history, session_context=session_context)
 
-        logger.info(f"Response is ready to be streamed.")
+        logger.info("Response is ready to be streamed.")
         if isinstance(stream_response, str):
             # Mimic streaming processing by yielding one chunk at a time.
             splitted_response = re.split(r"(?=[\s,.!?])", stream_response)
@@ -47,5 +47,5 @@ class ChatEngine(metaclass=Singleton):
             yield ChatResponse(content=stream_response, status=ResponseStatus.GENERATING)
 
         # Indicate completion of the response stream
-        logger.info(f"Request processing completed.")
+        logger.info("Request processing completed.")
         yield ChatResponse(status=ResponseStatus.STOP)

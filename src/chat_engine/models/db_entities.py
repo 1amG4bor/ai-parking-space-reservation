@@ -1,12 +1,12 @@
 """Module for representing USER related database entities and models."""
 
 from datetime import datetime
-from sqlalchemy import Enum, ForeignKey, Table, Column
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+
+from sqlalchemy import Column, Enum, ForeignKey, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from chat_engine.models.base import Base
-from chat_engine.models.enums import FuelType, PreferenceType, VehicleType, ReservationStatus
-
+from chat_engine.models.enums import FuelType, PreferenceType, ReservationStatus, VehicleType
 
 user_preference_association = Table(
     "user_preferences",
@@ -17,7 +17,7 @@ user_preference_association = Table(
 
 
 class UserEntity(Base):
-    """A class representing a user entity in the database."""
+    """Entity that represents a user in the database."""
 
     __tablename__ = "users"
 
@@ -41,8 +41,8 @@ class UserEntity(Base):
 
 
 class LocationEntity(Base):
-    """A class representing a location entity in the database.
-    It has a many-to-one relationship with UserEntity, as a user can have multiple locations but each location belongs to only one user.
+    """Entity that represents a location in the database. It has a many-to-one relationship with UserEntity,
+    as a user can have multiple locations but each location belongs to only one user.
     """
 
     __tablename__ = "locations"
@@ -61,8 +61,8 @@ class LocationEntity(Base):
 
 
 class VehicleEntity(Base):
-    """A class representing a vehicle entity in the database.
-    It has a many-to-one relationship with UserEntity, as a user can have multiple vehicles but each vehicle belongs to only one user.
+    """Entity that represents a vehicle in the database. It has a many-to-one relationship with UserEntity,
+    as a user can have multiple vehicles but each vehicle belongs to only one user.
     """
 
     __tablename__ = "vehicles"
@@ -89,8 +89,8 @@ PREFERENCE_TYPE_ENUM = Enum(
 
 
 class PreferenceEntity(Base):
-    """A class representing a user preference entity in the database.
-    It has a many-to-many relationship with UserEntity, as a user can have multiple preferences and multiple users can have the same preference.
+    """Entity that represents a user preference in the database. It has a many-to-many relationship with UserEntity,
+    as a user can have multiple preferences and multiple users can have the same preference.
     """
 
     __tablename__ = "preferences"
@@ -110,8 +110,8 @@ class PreferenceEntity(Base):
 
 
 class ReservationEntity(Base):
-    """A class representing a reservation entity in the database.
-    It has a many-to-one relationship with UserEntity, as a user can have multiple reservations but each reservation belongs to only one user.
+    """Entity that represents a reservation in the database. It has a many-to-one relationship with UserEntity,
+    as a user can have multiple reservations but each reservation belongs to only one user.
     """
 
     __tablename__ = "reservations"
@@ -131,4 +131,7 @@ class ReservationEntity(Base):
     vehicle: Mapped["VehicleEntity"] = relationship("VehicleEntity")
 
     def __repr__(self):
-        return f"Reservation {self.reservation_id} for parking lot {self.parking_lot_id} from {self.start_time} to {self.end_time} with status {self.status.value}"
+        template = "Reservation {} for parking lot {} from {} to {} with status {}"
+        return template.format(
+            self.reservation_id, self.parking_lot_id, self.start_time, self.end_time, self.status.value
+        )

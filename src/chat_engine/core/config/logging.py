@@ -1,6 +1,7 @@
 """Shared logging configuration for the application."""
-import os
+
 import logging
+import os
 
 
 def create_logger():
@@ -9,11 +10,10 @@ def create_logger():
     # Configure logging
     logging.basicConfig(
         level=log_level_str,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        format="%(asctime)s - %(name)s|%(filename)s:%(lineno)d - %(levelname)s - %(message)s",
     )
 
-    logger = logging.getLogger("APSR")
+    return logging.getLogger("APSR")
 
-    return logger
 
 logger = create_logger()

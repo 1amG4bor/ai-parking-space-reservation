@@ -2,12 +2,11 @@ from langchain.agents import AgentState, create_agent
 from langgraph.checkpoint.memory import InMemorySaver
 
 from chat_engine.core.agents.agent_models import AgentContext
+from chat_engine.core.agents.middleware import credit_card_guard, email_guard
 from chat_engine.core.config.config import ConfigManager
-from chat_engine.core.prompts import SYSTEM_PROMPT
-from chat_engine.core.utils.agent_tool import retriever_tool, websearch_tool, reservation_tool
-from chat_engine.core.agents.middleware import email_guard, credit_card_guard
-
 from chat_engine.core.config.logging import logger
+from chat_engine.core.prompts import SYSTEM_PROMPT
+from chat_engine.core.utils.agent_tool import reservation_tool, retriever_tool, websearch_tool
 
 
 class ReservationAgent:
@@ -22,16 +21,11 @@ class ReservationAgent:
             checkpointer=InMemorySaver(),
         )
 
-    def guardrail(self, prompt: str) -> bool:
-        """A guardrail function to check the user's query before processing it.
-        The goal is to prevent exposure of sensitive data and/or avoid any inappropriate or malicious act."""
-        self.logger.info(f"Guardrail check for the user's query: {prompt}")
-        result = self.agent.invoke_tool("guardrail_tool", {"query": prompt})
-
-    def invoke(self, prompt: str, history: list[dict], session_context: dict = []) -> str:
+    def invoke(self, prompt: str, history: list[dict], session_context: dict) -> str:
         """Invoke the reservation agent to process the user's query and provide a response."""
         # Convert chat history to AgentState format
-        history = [AgentState(role=msg["role"], content=msg["content"]) for msg in history]
+        combined_history = history + [{"role": "user", "content": prompt}]
+        history = [AgentState(role=msg["role"], content=msg["content"]) for msg in combined_history]
         history_size = len(history)
 
         agent_context = AgentContext(

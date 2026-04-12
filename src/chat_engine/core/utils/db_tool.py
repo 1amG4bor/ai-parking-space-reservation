@@ -1,20 +1,21 @@
 """Service for database operations, including initialization and connection management."""
 
 from datetime import datetime
+
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, selectinload
 
 from chat_engine.core.config.config import ConfigManager
-from chat_engine.core.utils.patterns import Singleton
-from chat_engine.models.enums import ReservationStatus
-from chat_engine.models.db_entities import (
-    PreferenceEntity,
-    UserEntity,
-    LocationEntity,
-    VehicleEntity,
-    ReservationEntity,
-)
 from chat_engine.core.config.logging import logger
+from chat_engine.core.utils.patterns import Singleton
+from chat_engine.models.db_entities import (
+    LocationEntity,
+    PreferenceEntity,
+    ReservationEntity,
+    UserEntity,
+    VehicleEntity,
+)
+from chat_engine.models.enums import ReservationStatus
 
 
 class DatabaseService(metaclass=Singleton):
@@ -25,7 +26,8 @@ class DatabaseService(metaclass=Singleton):
     def __init__(self):
         cfg_manager = ConfigManager()
         try:
-            self._db_url = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}".format(
+            db_url_template = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{db}"
+            self._db_url = db_url_template.format(
                 user=cfg_manager.get_config("DATABASE_USER"),
                 password=cfg_manager.get_config("DATABASE_PASSWORD"),
                 host=cfg_manager.get_config("DATABASE_HOST"),
@@ -37,13 +39,13 @@ class DatabaseService(metaclass=Singleton):
             self._initialize_database()
         except Exception as err:
             logger.error(f"❌ Failed to initialize connection to the database: {err}")
-            raise ConnectionError(f"Failed to connect to the database: {err}")
+            raise ConnectionError(f"Failed to connect to the database: {err}") from err
 
     def _initialize_database(self):
         """Initialize the database schema and tables if they don't exist."""
         # Initialize connection and create tables if necessary
         try:
-            with self._engine.connect() as connection:
+            with self._engine.connect():
                 logger.info("✅ Successfully connected to the database.")
                 # Create tables if they don't exist
                 UserEntity.metadata.create_all(self._engine)
@@ -54,7 +56,7 @@ class DatabaseService(metaclass=Singleton):
                 logger.info("✅ Database tables are initialized and ready.")
         except Exception as e:
             logger.error(f"❌ Failed to initialize the database: {e}")
-            raise ConnectionError(f"Failed to initialize the database: {e}")
+            raise ConnectionError(f"Failed to initialize the database: {e}") from e
 
     def get_user_by_email(self, email: str):
         """Fetch a user from the database by their email, including locations and vehicles."""
@@ -94,7 +96,7 @@ class DatabaseService(metaclass=Singleton):
                 logger.info(f"✅ Added new user: {user_data['username']} to the database.")
         except Exception as e:
             logger.error(f"❌ Failed to add user {user_data['username']} to the database: {e}")
-            raise Exception(f"Failed to add user {user_data['username']} to the database: {e}")
+            raise  # Re-raise the same exception
 
     def add_location(self, user_name: str, location_data: dict):
         """Add a new location to the database."""
@@ -109,7 +111,7 @@ class DatabaseService(metaclass=Singleton):
                 logger.info(f"✅ Added new location to the user {user_name}.")
         except Exception as e:
             logger.error(f"❌ Failed to add location to the user {user_name}: {e}")
-            raise Exception(f"Failed to add location to the user {user_name}: {e}")
+            raise  # Re-raise the same exception
 
     def add_vehicle(self, user_name: str, vehicle_data: dict):
         """Add a new vehicle to the database."""
@@ -124,7 +126,7 @@ class DatabaseService(metaclass=Singleton):
                 logger.info(f"✅ Added new vehicle to the user {user_name}.")
         except Exception as e:
             logger.error(f"❌ Failed to add vehicle to the user {user_name}: {e}")
-            raise Exception(f"Failed to add vehicle to the user {user_name}: {e}")
+            raise  # Re-raise the same exception
 
     def get_all_reservations_by_username(self, username: str):
         """Fetch all reservations for a specific user from the database."""
@@ -156,7 +158,7 @@ class DatabaseService(metaclass=Singleton):
                 }
         except Exception as e:
             logger.error(f"❌ Failed to create reservation for the user: {username}: {e}")
-            raise Exception(f"Failed to create reservation for the user: {username}: {e}")
+            raise  # Re-raise the same exception
 
     def update_reservation_status(self, reservation_id: str, new_status: ReservationStatus):
         """Update the status of an existing reservation in the database."""
@@ -175,8 +177,7 @@ class DatabaseService(metaclass=Singleton):
                 logger.info(f"✅ Updated reservation {reservation_id} status to {new_status}.")
         except Exception as e:
             logger.error(f"❌ Failed to update reservation {reservation_id} status: {e}")
-            raise Exception(f"Failed to update reservation {reservation_id} status: {e}")
-
+            raise  # Re-raise the same exception
 
     def execute_query(self, query: str):
         """Execute a raw SQL query against the database."""
@@ -190,4 +191,4 @@ class DatabaseService(metaclass=Singleton):
                 return result.fetchall()
         except Exception as e:
             logger.error(f"❌ Failed to execute query '{query}': {e}")
-            raise Exception(f"Failed to execute query '{query}': {e}")
+            raise  # Re-raise the same exception

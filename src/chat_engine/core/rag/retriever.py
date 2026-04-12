@@ -4,6 +4,7 @@ from weaviate.classes.generate import GenerativeConfig
 from chat_engine.core.config.config import ConfigManager
 from chat_engine.core.config.logging import logger
 
+
 class ParkingInfoRetriever:
 
     def __init__(self, top_k: int = 5):
@@ -18,11 +19,8 @@ class ParkingInfoRetriever:
         with weaviate.connect_to_local() as client:
             parking_lot_info = client.collections.use("ParkingLotInfo")
 
-            response = parking_lot_info.query.near_text(
-                query=query, limit=self._top_k
-            )
+            response = parking_lot_info.query.near_text(query=query, limit=self._top_k)
 
-            
             results = [item.properties for item in response.objects]
             logger.info(f"Retrieved {len(results)} parking information.")
             parking_lot_ids = [item.properties["parking_lot_id"] for item in response.objects]

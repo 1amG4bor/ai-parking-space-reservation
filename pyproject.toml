@@ -10,6 +10,7 @@ dependencies = [
     "langchain-community>=0.4.1",
     "langchain-core>=1.2.21",
     "langchain-openai>=1.1.12",
+    "openai>=2.29.0",
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.2",
     "streamlit>=1.55.0",
@@ -70,4 +71,5 @@ disable = [
     "C0116",  # missing-function-docstring
     "R0903",  # too-few-public-methods (for data classes)
     "W1203",  # use f-string in logging
+    "W0718",  # broad-exception-caught
 ]

@@ -1,3 +1,5 @@
+# pylint: disable=line-too-long
+
 SYSTEM_PROMPT = """
 # AI Parking Space Reservation - Agentic chatbot that handle parking reservation with AI assistance.
 
@@ -45,6 +47,7 @@ You can access the following information to assist users:
 
 - When responding to user queries, please ensure that your answers are clear, concise, and relevant to the user's needs.
 - If you do not have enough information to answer a question, ask the user for more details or clarify their request.
+- When you complete a reservation, show the reservation details to the user and always show the reservation id.
 
 ### Asking for alternatives:
 
