@@ -1,7 +1,7 @@
 from langchain.agents import AgentState, create_agent
 from langgraph.checkpoint.memory import InMemorySaver
 
-from chat_engine.core.agents.agent_models import AgentContext
+from chat_engine.core.agents.agent_models import ApsrSessionContext, ReservationAgentState
 from chat_engine.core.agents.middleware import credit_card_guard, email_guard
 from chat_engine.core.config.config import ConfigManager
 from chat_engine.core.config.logging import logger
@@ -17,8 +17,9 @@ class ReservationAgent:
             system_prompt=SYSTEM_PROMPT,
             tools=[retriever_tool, websearch_tool, reservation_tool],
             middleware=[email_guard, credit_card_guard],
-            context_schema=AgentContext,
+            context_schema=ApsrSessionContext,
             checkpointer=InMemorySaver(),
+            state_schema=ReservationAgentState,
         )
 
     def invoke(self, prompt: str, history: list[dict], session_context: dict) -> str:
@@ -28,18 +29,10 @@ class ReservationAgent:
         history = [AgentState(role=msg["role"], content=msg["content"]) for msg in combined_history]
         history_size = len(history)
 
-        agent_context = AgentContext(
-            authenticated=session_context.get("authenticated", False),
-            username=session_context.get("username"),
-            selected_vehicle=session_context.get("vehicle_id"),
-            selected_location=session_context.get("location"),
-            preferences=session_context.get("preferences", []),
-        )
-
         result = self.agent.invoke(
             {"messages": history},
-            context=agent_context,
-            config={"configurable": {"thread_id": session_context.get("thread_id")}},
+            context=session_context,
+            config={"configurable": {"thread_id": session_context.thread_id}},
         )
 
         # Typical create_agent output contains updated messages

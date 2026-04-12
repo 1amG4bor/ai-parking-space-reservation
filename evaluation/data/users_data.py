@@ -1,10 +1,11 @@
-from chat_engine.models.vehicle import VehicleType, FuelType
+from chat_engine.models.enums import VehicleType, FuelType, PreferenceType
 
 test_users = [
     {
-        "username": "user1",
-        "email": "user1@mymail.com",
+        "username": "john.doe",
+        "email": "jdoe@mymail.com",
         "password": "user-pw",
+        "preferences": [PreferenceType.COVERED_PARKING.to_dict(), PreferenceType.ACCESS_24_7.to_dict()],
         "locations": [
             {
                 "country": "Hungary",
@@ -16,11 +17,11 @@ test_users = [
         ],
         "vehicles": [
             {
-                "type": VehicleType.SUV.value.upper(),
+                "type": VehicleType.SUV.name,
                 "model": "Kia Sportage",
                 "year": 2016,
                 "license_plate": "ABCD-123",
-                "fuel_type": FuelType.DIESEL.value.upper(),
+                "fuel_type": FuelType.DIESEL.name,
             },
         ],
     },
@@ -28,6 +29,7 @@ test_users = [
         "username": "user2",
         "email": "user2@mymail.com",
         "password": "user-pw",
+        "preferences": [],
         "locations": [
             {
                 "country": "Hungary",
@@ -39,11 +41,11 @@ test_users = [
         ],
         "vehicles": [
             {
-                "type": VehicleType.SEDAN.value.upper(),
+                "type": VehicleType.SEDAN.name,
                 "model": "Toyota Corolla",
                 "year": 2018,
                 "license_plate": "EFGH-456",
-                "fuel_type": FuelType.PETROL.value.upper(),
+                "fuel_type": FuelType.PETROL.name,
             },
         ],
     },
@@ -51,6 +53,7 @@ test_users = [
         "username": "user3",
         "email": "user3@mymail.com",
         "password": "user-pw",
+        "preferences": [PreferenceType.EV_CHARGING_STATION.to_dict()],
         "locations": [
             {
                 "country": "Hungary",
@@ -62,11 +65,11 @@ test_users = [
         ],
         "vehicles": [
             {
-                "type": VehicleType.COUPE.value.upper(),
+                "type": VehicleType.COUPE.name,
                 "model": "Audi TT Coupe",
                 "year": 2020,
                 "license_plate": "IJKL-789",
-                "fuel_type": FuelType.ELECTRIC.value.upper(),
+                "fuel_type": FuelType.ELECTRIC.name,
             },
         ],
     },
@@ -74,6 +77,7 @@ test_users = [
         "username": "user4",
         "email": "user4@mymail.com",
         "password": "user-pw",
+        "preferences": [PreferenceType.LARGE_VEHICLE_SPACES.to_dict()],
         "locations": [
             {
                 "country": "Hungary",
@@ -85,11 +89,11 @@ test_users = [
         ],
         "vehicles": [
             {
-                "type": VehicleType.VAN.value.upper(),
+                "type": VehicleType.VAN.name,
                 "model": "Ford Transit",
                 "year": 2015,
                 "license_plate": "MNOP-321",
-                "fuel_type": FuelType.DIESEL.value.upper(),
+                "fuel_type": FuelType.DIESEL.name,
             },
         ],
     },
@@ -97,6 +101,7 @@ test_users = [
         "username": "user5",
         "email": "user5@mymail.com",
         "password": "user-pw",
+        "preferences": [PreferenceType.LARGE_VEHICLE_SPACES.to_dict()],
         "locations": [
             {
                 "country": "Hungary",
@@ -108,11 +113,11 @@ test_users = [
         ],
         "vehicles": [
             {
-                "type": VehicleType.TRUCK.value.upper(),
+                "type": VehicleType.TRUCK.name,
                 "model": "Mercedes-Benz Actros",
                 "year": 2019,
                 "license_plate": "QRST-654",
-                "fuel_type": FuelType.DIESEL.value.upper(),
+                "fuel_type": FuelType.DIESEL.name,
             },
         ],
     },

@@ -73,7 +73,6 @@ def _load_data_from_source(file_path: str):
 
 if __name__ == "__main__":
     source_file_name = "parking_lot_data.json"
-    # source_file_name = "src_data.json"
     data_source_file = os.path.join(ROOT_FOLDER, "data", source_file_name)
     upload_data_to_vector_db(data_source_file)
 

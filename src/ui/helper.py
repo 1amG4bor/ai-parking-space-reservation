@@ -1,5 +1,6 @@
 import streamlit as st
 
+from chat_engine.core.agents.agent_models import ApsrSessionContext
 from chat_engine.core.utils.db_tool import DatabaseService
 from chat_engine.engine.apsr_chat_engine import ChatEngine  # pylint: disable=no-name-in-module
 from ui.constants import Avatar, parking_preferences
@@ -47,7 +48,6 @@ def set_sidebar(context):
         f"{vehicle.model} - {vehicle.license_plate} | {vehicle.type.value} ({vehicle.fuel_type.value})": vehicle.id
         for vehicle in _user_data.vehicles
     }
-
     vehicle_selection = st.sidebar.selectbox(
         "Select the used vehicle:",
         options=list(vehicle_options.keys()),
@@ -69,10 +69,10 @@ def set_sidebar(context):
         placeholder="Choose your preferences",
     )
 
-    st.session_state.session_context["vehicle"] = vehicle_selection
-    st.session_state.session_context["vehicle_id"] = vehicle_options.get(vehicle_selection)
-    st.session_state.session_context["location"] = location_selection
-    st.session_state.session_context["preferences"] = parking_preferences_selection
+    st.session_state.session_context.vehicle_id = vehicle_options.get(vehicle_selection)
+    st.session_state.session_context.selected_vehicle = vehicle_selection
+    st.session_state.session_context.selected_location = location_selection
+    st.session_state.session_context.selected_preferences = parking_preferences_selection
 
 
 def setup_defaults():
@@ -89,7 +89,7 @@ def setup_defaults():
     for key, message in default_messages.items():
         st.session_state.default_msg.setdefault(key, message)
 
-    st.session_state.session_context = {}
+    st.session_state.session_context = ApsrSessionContext()
     st.session_state.processing = False
     st.session_state.chat_history = []
     st.session_state.chat_history.append(default_messages["greeting"])

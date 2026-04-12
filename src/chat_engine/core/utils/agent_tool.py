@@ -2,9 +2,13 @@
 import os
 import random
 from datetime import UTC, datetime
+from typing import Annotated
 
 from fastapi import HTTPException
 from langchain.tools import ToolRuntime, tool
+from langchain_core.messages import ToolMessage
+from langchain_core.tools import InjectedToolCallId
+from langgraph.types import Command
 from tavily import TavilyClient
 
 from chat_engine.core.config.logging import logger
@@ -43,37 +47,53 @@ def user_info_tool(runtime: ToolRuntime) -> dict:
         logger.error(f"Failed to fetch user data: {err}")
         return "Failed to fetch user data. Please try again."
 
-    user_info = {
-        "vehicles": user_data.vehicles,
-        "location": user_data.location,
-        # "preferences": user_data.preferences,
-    }
-    return user_info
+    return Command(
+        update={
+            "locations": user_data.locations,
+            "vehicles": user_data.vehicles,
+            "preferences": user_data.preferences,
+            "reservation_history": user_data.reservations,
+        }
+    )
 
 
 @tool
-def retriever_tool(query: str, top_k: int = 5) -> str:
+def retriever_tool(
+    tool_call_id: Annotated[str, InjectedToolCallId],
+    query: str,
+    top_k: int = 5,
+) -> Command:
     """
     A tool for retrieving relevant parking information from the vector database based on the user's query.
     Use this tool to get relevant parking lot information, parking space features, reservation policies, pricing and payment options, operating hours, and any restrictions that can assist you in providing accurate and personalized recommendations for parking spaces.
 
     Args:
+        tool_call_id (str): The unique identifier for the tool call, injected by the framework.
         query (str): The user's query for which relevant parking information needs to be retrieved.
         top_k (int): The number of relevant parking lot information to retrieve from the vector database.
 
     Returns:
-        str: The retrieved parking information relevant to the user's query, or an error message if the retrieval operation failed.
+        Command: A command containing the retrieved parking information to save into the agent's state under "retrieved_parking_info", along with a status message indicating the number of relevant parking information retrieved.
     """
     logger.info(f"Retrieving parking information for query: '{query}' with top_k: {top_k}")
     try:
         retriever = ParkingInfoRetriever(top_k=top_k)
-        parking_info = retriever.retrieve(query)
+        parking_info_list = retriever.retrieve(query)
         logger.info("Retriever tool succeeded.")
     except Exception as err:
         logger.error(f"Retriever tool failed: {err}")
         return f"Failed to retrieve parking information. Please try again. Error: {err}"
 
-    return parking_info
+    return Command(
+        update={
+            "retrieved_parking_info": parking_info_list,
+            "messages": [
+                ToolMessage(
+                    content=f"The retrieved parking information: {parking_info_list}", tool_call_id=tool_call_id
+                )
+            ],
+        }
+    )
 
 
 @tool
@@ -133,7 +153,16 @@ def reservation_tool(runtime: ToolRuntime, parking_lot_id: str, category: str, r
     """
     # Placeholder for reservation logic
     username = runtime.context.username
-    selected_vehicle_id = runtime.context.selected_vehicle
+    # Save the reservation details
+    runtime.state["current_reservation_details"] = {
+        "username": username,
+        "parking_lot_id": parking_lot_id,
+        "category": category,
+        "reservation_start_time": reservation_time["start"],
+        "reservation_end_time": reservation_time["end"],
+    }
+
+    selected_vehicle_id = runtime.context.vehicle_id
     logger.info(
         f"Making reservation for user '{username}' at parking lot {parking_lot_id} ({category}) from {reservation_time['start']} to {reservation_time['end']}"
     )

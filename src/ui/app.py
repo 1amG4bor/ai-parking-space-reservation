@@ -27,9 +27,9 @@ if "initialized" not in st.session_state:
     setup_defaults()
 
     # Set authentication context for the session (in a real app, this would come from your auth system)
-    st.session_state.session_context["authenticated"] = AUTH_CONTEXT["authenticated"]
-    st.session_state.session_context["username"] = AUTH_CONTEXT["username"]
-    st.session_state.session_context["thread_id"] = str(uuid4())  # Unique identifier for the chat session/thread
+    st.session_state.session_context.authenticated = AUTH_CONTEXT["authenticated"]
+    st.session_state.session_context.username = AUTH_CONTEXT["username"]
+    st.session_state.session_context.thread_id = str(uuid4())  # Unique identifier for the chat session/thread
 
     st.session_state.initialized = True
 
@@ -92,7 +92,7 @@ with st.container(border=True, width="stretch", height="stretch", gap="small", k
                         full_formatted_msg += formatted_chunk
             except Exception as error:  # pylint: disable=broad-except
                 st.error(f"An error occurred while processing your request: {error}")
-                st.write(st.session_state.error)
+                st.write(st.session_state.default_msg.get(error))
 
             if full_formatted_msg:
                 st.session_state.chat_history.append({"role": "assistant", "content": full_formatted_msg})
