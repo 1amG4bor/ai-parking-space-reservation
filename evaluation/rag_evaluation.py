@@ -143,7 +143,6 @@ DEFAULT_EVAL_CASES: list[EvalCase] = [
 
 if __name__ == "__main__":
     default_cases = DEFAULT_EVAL_CASES
-
     custom_cases = None
 
     run_evaluation(cases=custom_cases or default_cases)

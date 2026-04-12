@@ -52,8 +52,8 @@ pre_commit = "cicd.scripts:pre_commit"
 backend = "cicd.scripts:run_backend"
 app = "cicd.scripts:run_frontend"
 # Running evaluation
-performance_test = "cicd.scripts:performance_test"
-accuracy_test = "cicd.scripts:accuracy_test"
+eval_retrieval = "cicd.scripts:evaluate_retrieval"
+eval_rag = "cicd.scripts:evaluate_rag_system"
 
 [tool.black]
 line-length = 120
