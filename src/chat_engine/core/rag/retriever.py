@@ -25,5 +25,6 @@ class ParkingInfoRetriever:
             
             results = [item.properties for item in response.objects]
             logger.info(f"Retrieved {len(results)} parking information.")
-            logger.debug(f"Retrieved parking information ids: {[str(item.uuid) for item in response.objects]}")
+            parking_lot_ids = [item.properties["parking_lot_id"] for item in response.objects]
+            logger.info(f"Retrieved parking information with ids: {parking_lot_ids}")
             return results

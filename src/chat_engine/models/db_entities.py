@@ -7,8 +7,6 @@ from sqlalchemy.orm import relationship, Mapped, mapped_column
 from chat_engine.models.base import Base
 from chat_engine.models.enums import FuelType, PreferenceType, VehicleType, ReservationStatus
 
-# from chat_engine.models.reservation_entity import ReservationEntity
-
 
 user_preference_association = Table(
     "user_preferences",
