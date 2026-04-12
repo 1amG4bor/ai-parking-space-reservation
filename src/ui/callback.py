@@ -4,47 +4,57 @@ from typing import Any
 import streamlit as st
 from langchain.messages import AIMessage, AIMessageChunk
 
-from chat_engine.core.tools.patterns import Singleton
+from chat_engine.core.utils.patterns import Singleton
 from ui.utils import format_html
 
 
 class StreamlitCallback(metaclass=Singleton):
 
-    def display_content(self, message: Any) -> Any:
-        # Placeholder for Streamlit-specific callback logic
+    def __init__(self):
+        self.msg_placeholder = None
+        self.last_write_mode = None
+        self.full_response = None
+
+    def display_content(self, message: Any, mode: str, placeholder: Any = None) -> Any:
         msg_type = type(message).__name__
+        if placeholder:
+            self.msg_placeholder = placeholder
 
         formatted_msg = ""
         # Handling different type of message
         if isinstance(message, str):
-            formatted_msg = self._update_ui(message)
+            formatted_msg = self._update_ui(message, mode)
         elif isinstance(message, (AIMessage, AIMessageChunk)):
-            formatted_msg = self._update_ui(message.content)
+            formatted_msg = self._update_ui(message.content, mode)
         elif isinstance(message, (list, GeneratorType)):
-            formatted_msg = self._update_ui(message)
+            formatted_msg = self._update_ui(message, mode)
         else:
             st.warning(f"Received message of unhandled type: {msg_type}")
 
         return formatted_msg
 
-    def _update_ui(self, message: Any) -> Any:
+    def _update_ui(self, message: Any, mode: str = "GENERATING") -> Any:
         # Internal method for UI updates, can be called by update_ui
-        formatted_msg = ""
-        msg_placeholder = st.empty()
+        if not self.msg_placeholder:
+            self.msg_placeholder = st.empty()
+        full_response = self.full_response or ""
+
         if isinstance(message, (list, GeneratorType)):
-            full_response = ""
+            msg_chunks = ""
             for chunk in message:
                 if isinstance(chunk, str):
-                    full_response += format_html(chunk)
+                    msg_chunks += format_html(chunk)
                 elif isinstance(chunk, (AIMessage, AIMessageChunk)):
-                    full_response += format_html(chunk.content)
+                    msg_chunks = format_html(msg_chunks + chunk.content)
+                self.msg_placeholder.markdown(format_html(full_response + msg_chunks) + "┃", unsafe_allow_html=True)
 
-                msg_placeholder.markdown(format_html(full_response) + "**|**", unsafe_allow_html=True)
-
-            formatted_msg = format_html(full_response)
+            formatted_msg = msg_chunks
         elif isinstance(message, str):
             formatted_msg = format_html(message)
-            msg_placeholder.markdown(formatted_msg, unsafe_allow_html=True)
+            formatted_msg = formatted_msg.replace("\n", "<br>")
+            self.msg_placeholder.markdown(format_html(full_response + formatted_msg) + "┃", unsafe_allow_html=True)
 
-        msg_placeholder.write(formatted_msg, unsafe_allow_html=True)
+        self.full_response = full_response + formatted_msg
+        self.last_write_mode = mode
+
         return formatted_msg

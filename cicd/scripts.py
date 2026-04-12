@@ -1,10 +1,10 @@
 """This module contains scripts for quality assurance check and deployment."""
 
-import argparse
-import os
 import sys
 import subprocess
 from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # ========== Quality Assurance Checks ==========
@@ -66,7 +66,7 @@ def run_backend():
     """Run the backend services, including SQL database, Vector database, and ChatEngine API."""
     print("🚀 Running the backend service is in progress...")
     try:
-        result = subprocess.run(["docker-compose", "up", "-d", "backend"], check=True)
+        result = subprocess.run(["docker", "compose", "--env-file", ".env", "up"], check=True)
     except Exception as err:
         print("\n❌ Backend run failed!\nCheck the run output to fix the issue.\n")
         sys.exit(-1)
@@ -86,26 +86,27 @@ def run_frontend():
 
 
 # ========= Running evaluation tests ==========
-def performance_test():
-    """Run the performance test script."""
-    print("🚀 Running performance tests...")
+def evaluate_retrieval():
+    """Run the semantic search script to evaluate the retrieval accuracy."""
+    args = sys.argv[1:]
+    print("🚀 Running semantic search on the vector db to find relevant documents...")
     try:
-        result = subprocess.run(["python", "tests/performance_test.py"], check=True)
+        result = subprocess.run([sys.executable, "evaluation/semantic_search.py", *args], check=True)
     except Exception as err:
-        print("\n❌ Performance tests failed!\nCheck the test output to fix the issue.\n")
+        print("\n❌ Semantic search failed!\nCheck the logs to address the issue.\n")
         sys.exit(-1)
-    print("✅ Performance tests passed.")
+    print("✅ Semantic search completed successfully.")
 
 
-def accuracy_test():
-    """Run the accuracy test script."""
-    print("🚀 Running accuracy tests...")
+def evaluate_rag_system():
+    """Run the RAG system evaluation."""
+    print("🚀 Running RAG system evaluation...")
     try:
-        result = subprocess.run(["python", "tests/accuracy_test.py"], check=True)
+        result = subprocess.run([sys.executable, "evaluation/rag_evaluation.py"], check=True)
     except Exception as err:
-        print("\n❌ Accuracy tests failed!\nCheck the test output to fix the issue.\n")
+        print("\n❌ Evaluating the RAG system failed!\nCheck the logs to address the issue.\n")
         sys.exit(-1)
-    print("✅ Accuracy tests passed.")
+    print("✅ RAG system evaluation completed successfully.")
 
 
 if __name__ == "__main__":

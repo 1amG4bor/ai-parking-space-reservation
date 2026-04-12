@@ -5,12 +5,20 @@ description = "This is an Agentic RAG chatbot that handle parking reservation wi
 readme = "README.md"
 requires-python = ">=3.12, <3.14"
 dependencies = [
+    "fastapi>=0.135.3",
     "langchain>=1.2.13",
     "langchain-community>=0.4.1",
     "langchain-core>=1.2.21",
     "langchain-openai>=1.1.12",
+    "openai>=2.29.0",
+    "openpyxl>=3.1.5",
+    "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.2",
+    "ragas>=0.4.3",
     "streamlit>=1.55.0",
+    "streamlit-authenticator>=0.4.2",
+    "tavily>=1.1.0",
+    "weaviate-client>=4.20.4",
 ]
 
 
@@ -44,8 +52,8 @@ pre_commit = "cicd.scripts:pre_commit"
 backend = "cicd.scripts:run_backend"
 app = "cicd.scripts:run_frontend"
 # Running evaluation
-performance_test = "cicd.scripts:performance_test"
-accuracy_test = "cicd.scripts:accuracy_test"
+eval_retrieval = "cicd.scripts:evaluate_retrieval"
+eval_rag = "cicd.scripts:evaluate_rag_system"
 
 [tool.black]
 line-length = 120
@@ -65,4 +73,5 @@ disable = [
     "C0116",  # missing-function-docstring
     "R0903",  # too-few-public-methods (for data classes)
     "W1203",  # use f-string in logging
+    "W0718",  # broad-exception-caught
 ]

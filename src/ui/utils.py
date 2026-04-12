@@ -7,14 +7,12 @@ def format_html(text: str) -> str:
     bold_tag_pattern = r"<b>(.*?)</b>"
     italic_tag_pattern = r"<i>(.*?)</i>"
     list_item_pattern = r"<li>(.*?)</li>"
-    newline_pattern = r"<br\s*/?>"
 
     replacements = [
         (anchor_tag_pattern, r"[\2](\1)"),
         (bold_tag_pattern, r"**\1**"),
         (italic_tag_pattern, r"_\1_"),
         (list_item_pattern, r"- \1"),
-        (newline_pattern, r"\n"),
     ]
 
     for pattern, replacement in replacements:
