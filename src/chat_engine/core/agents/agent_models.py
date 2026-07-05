@@ -26,6 +26,7 @@ class ReservationDetails(BaseModel):
     start_time: datetime = Field(..., description="The start time of the reservation in ISO format.")
     end_time: datetime = Field(..., description="The end time of the reservation in ISO format.")
     reservation_id: str = Field(default=None, description="The unique identifier for the reservation.")
+    registration_time: datetime = Field(default=None, description="The time when the reservation was registered.")
 
 
 class ApsrSessionContext(BaseModel):

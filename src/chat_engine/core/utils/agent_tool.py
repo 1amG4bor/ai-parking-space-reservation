@@ -11,10 +11,11 @@ from langchain_core.tools import InjectedToolCallId
 from langgraph.types import Command
 from tavily import TavilyClient
 
-from chat_engine.core.agents.agent_models import ApsrSessionContext
+from chat_engine.core.agents.agent_models import ApsrSessionContext, ReservationDetails
 from chat_engine.core.config.logging import logger
 from chat_engine.core.rag.retriever import ParkingInfoRetriever
 from chat_engine.core.utils.db_tool import DatabaseService
+from chat_engine.core.utils.mcp_tool_helper import save_reservation_snapshot_via_mcp
 from chat_engine.models.db_entities import ReservationEntity
 from chat_engine.models.enums import ReservationStatus
 
@@ -290,6 +291,7 @@ def reservation_tool(
                 status="error",
                 tool_call_id=tool_call_id,
             )
+
         logger.info(f"✅ Reservation created successfully for user {username} at parking lot {parking_lot_id}.")
         return Command(
             update={
@@ -307,4 +309,51 @@ def reservation_tool(
         logger.error(f"Reservation tool failed: {err}")
         return ToolMessage(
             content=f"Failed to create reservation due to an error: {err}", status="error", tool_call_id=tool_call_id
+        )
+
+
+@tool
+def reservation_persistence_tool(
+    runtime: ToolRuntime[ApsrSessionContext, Any],
+    tool_call_id: Annotated[str, InjectedToolCallId],
+    reservation_data: ReservationDetails,
+    status: str,
+) -> ToolMessage:
+    """Persist a reservation snapshot into local JSON files via Filesystem MCP server.
+    Use this always when a new reservation is created to ensure you have a local file copy for auditing, traceability.
+
+    Args:
+        runtime (ToolRuntime): The runtime context to access the current user's session and other runtime information.
+        tool_call_id (str): The unique identifier for the tool call.
+        reservation_data (ReservationDetails): The reservation details to be persisted.
+        status (str): The status of the reservation.
+    """
+    username = runtime.context.username
+    selected_vehicle_id = runtime.context.vehicle_id
+
+    try:
+        result = save_reservation_snapshot_via_mcp(
+            {
+                "reservation_id": reservation_data.reservation_id,
+                "username": username,
+                "vehicle_id": selected_vehicle_id,
+                "parking_lot_id": reservation_data.parking_lot_id,
+                "category": reservation_data.parking_space_category,
+                "start_time": str(reservation_data.start_time),
+                "end_time": str(reservation_data.end_time),
+                "status": status.upper(),
+                "created_at": reservation_data.registration_time.isoformat(),
+            }
+        )
+        return ToolMessage(
+            content=(f"Reservation snapshot persisted successfully, available at location: {result.get('path')}."),
+            status="success",
+            tool_call_id=tool_call_id,
+        )
+    except Exception as err:
+        logger.warning(f"Failed to persist reservation snapshot for {reservation_data.reservation_id}: {err}")
+        return ToolMessage(
+            content=f"Failed to persist reservation snapshot via MCP: {err}",
+            status="error",
+            tool_call_id=tool_call_id,
         )
