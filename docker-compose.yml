@@ -44,6 +44,33 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  # User interface with Streamlit for the parking-lot reservation system, allowing users to interact with the system.
+  app-ui:
+    build: .
+    ports:
+      - "9000:8501"
+    command: uv run streamlit run src/ui/app.py --server.port=8501 --server.address=0.0.0.0
+    environment:
+      DATABASE_URL: postgres://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres-db:5432/$(DATABASE_NAME)
+      WEAVIATE_URL: http://weaviate:8080
+      OLLAMA_API_ENDPOINT: http://ollama:11434
+    depends_on:
+      - weaviate
+      - ollama
+      - postgres-db
+
+  # Admin UI with Streamlit for reservation approval system, allowing admins to manage reservations.
+  admin-ui:
+    build: .
+    ports:
+      - "9100:8501"
+    command: uv run streamlit run src/admin_ui/app.py --server.port=8501 --server.address=0.0.0.0
+    environment:
+      DATABASE_URL: postgres://$(DATABASE_USER):$(DATABASE_PASSWORD)@postgres-db:5432/$(DATABASE_NAME)
+    depends_on:
+      - postgres-db
+
+
 volumes:
   weaviate_data:
   ollama_data:

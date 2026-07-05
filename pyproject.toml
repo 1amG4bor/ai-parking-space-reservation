@@ -51,6 +51,7 @@ pre_commit = "cicd.scripts:pre_commit"
 # Running the application
 backend = "cicd.scripts:run_backend"
 app = "cicd.scripts:run_frontend"
+admin_ui = "cicd.scripts:run_admin_ui"
 # Running evaluation
 eval_retrieval = "cicd.scripts:evaluate_retrieval"
 eval_rag = "cicd.scripts:evaluate_rag_system"

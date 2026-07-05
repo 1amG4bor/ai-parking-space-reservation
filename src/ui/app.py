@@ -1,4 +1,22 @@
+# pylint: disable=too-many-arguments, too-many-positional-arguments, wrong-import-position
 """This is the DEV UI for testing and development purposes. It is not meant for production use."""
+
+import traceback
+import warnings
+
+
+def warn_with_traceback(message, category, filename, lineno, file=None, line=None):
+    """Custom warning handler that prints the full stack trace for warnings."""
+    log = traceback.format_stack()
+    print(
+        f"Warning triggered: {message}\nCategory: {category}\nFile: {file}, Filename: {filename}, "
+        f"Line: {line}, Linenumber: {lineno}\nTraceback:\n{''.join(log)}"
+    )
+
+
+# Force all warnings to dump a full stack trace
+warnings.showwarning = warn_with_traceback
+
 
 from uuid import uuid4
 

@@ -82,7 +82,6 @@ class DatabaseService(metaclass=Singleton):
                     selectinload(UserEntity.locations),
                     selectinload(UserEntity.vehicles),
                     selectinload(UserEntity.preferences),
-                    selectinload(UserEntity.reservations),
                 )
                 .where(UserEntity.username == username)
             )
@@ -128,10 +127,26 @@ class DatabaseService(metaclass=Singleton):
             logger.error(f"❌ Failed to add vehicle to the user {user_name}: {e}")
             raise  # Re-raise the same exception
 
+    def get_all_reservations(self):
+        """Fetch all reservations from the database."""
+        with Session(self._engine) as session:
+            stmt = select(ReservationEntity).options(
+                selectinload(ReservationEntity.user), selectinload(ReservationEntity.vehicle)
+            )
+            return session.execute(stmt).scalars().all()
+
     def get_all_reservations_by_username(self, username: str):
         """Fetch all reservations for a specific user from the database."""
         with Session(self._engine) as session:
-            stmt = select(ReservationEntity).join(UserEntity).where(UserEntity.username == username)
+            stmt = (
+                select(ReservationEntity)
+                .join(UserEntity)
+                .options(
+                    selectinload(ReservationEntity.user),
+                    selectinload(ReservationEntity.vehicle),
+                )
+                .where(UserEntity.username == username)
+            )
             return session.execute(stmt).scalars().all()
 
     def create_reservation(self, username: str, reservation: ReservationEntity) -> dict:
@@ -152,7 +167,7 @@ class DatabaseService(metaclass=Singleton):
                 logger.info(f"✅ Reservation created successfully for the user: {username}.")
                 return {
                     "created": True,
-                    "id": reservation.id,
+                    "status": reservation.status.value,
                     "reservation_id": reservation.reservation_id,
                     "username": username,
                 }
@@ -181,7 +196,7 @@ class DatabaseService(metaclass=Singleton):
 
     def execute_query(self, query: str):
         """Execute a raw SQL query against the database."""
-        if any(keyword in query.lower() for keyword in ["delete", "update", "insert"]):
+        if any(keyword in str(query).lower() for keyword in ["delete", "update", "insert"]):
             logger.warning(f"⚠️ Attempt to execute a potentially harmful query: {query}")
             raise ValueError("Only SELECT queries are allowed.")
         try:

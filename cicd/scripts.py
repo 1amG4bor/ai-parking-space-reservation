@@ -85,6 +85,16 @@ def run_frontend():
     print("✅ Streamlit UI is running.")
 
 
+def run_admin_ui():
+    """Run the Streamlit Admin UI service."""
+    print("🚀 Starting the Streamlit Admin UI...")
+    try:
+        result = subprocess.run(["streamlit", "run", "src/admin_ui/app.py"], check=True)
+    except Exception as err:
+        print("\n❌ Starting the Streamlit Admin UI failed!\nCheck the run output to fix the issue.\n")
+        sys.exit(-1)
+    print("✅ Streamlit Admin UI is running.")
+
 # ========= Running evaluation tests ==========
 def evaluate_retrieval():
     """Run the semantic search script to evaluate the retrieval accuracy."""

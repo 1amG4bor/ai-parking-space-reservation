@@ -1,6 +1,8 @@
 import streamlit as st
 
 from chat_engine.core.agents.agent_models import ApsrSessionContext
+from chat_engine.core.agents.apsr_agent import APSRAgent
+from chat_engine.core.agents.reservation_agent import ReservationAgent
 from chat_engine.core.utils.db_tool import DatabaseService
 from chat_engine.engine.apsr_chat_engine import ChatEngine  # pylint: disable=no-name-in-module
 from ui.constants import Avatar, parking_preferences
@@ -95,10 +97,12 @@ def setup_defaults():
     st.session_state.chat_history.append(default_messages["greeting"])
 
 
-@st.cache_resource(show_spinner="Loading the chat engine...")
+@st.cache_resource(show_spinner="Waking up the agent... 🥱")
 def initialize_chat_engine():
     """Initialize the ChatEngine instance as a cached resource."""
-    return ChatEngine()
+    reservation_agent = ReservationAgent()
+    coordinator_agent = APSRAgent(reservation_agent=reservation_agent)
+    return ChatEngine(agent=coordinator_agent)
 
 
 @st.cache_resource(show_spinner="Collecting user data...")
