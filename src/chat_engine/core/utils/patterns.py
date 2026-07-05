@@ -9,16 +9,14 @@ class Singleton(type):
 
     def __call__(cls, *args, **kwargs):
         with cls._lock:
-            try:
-                if cls not in cls._type_instances:
+            if cls not in cls._type_instances:
+                logger.info(f"Creating new singleton instance for {cls.__name__}")
+                try:
                     instance = super(Singleton, cls).__call__(*args, **kwargs)
                     cls._type_instances[cls] = instance
-            except Exception as err:  # pylint: disable=broad-except
-                logger.error(f"Error occurred while creating singleton instance for {cls.__name__}: {err}")
+                except Exception:  # pylint: disable=broad-except
+                    # Keep the original exception and traceback to expose the real root cause.
+                    logger.exception(f"Error occurred while creating singleton instance for {cls.__name__}")
+                    raise
 
-        if cls in cls._type_instances:
-            return cls._type_instances[cls]
-
-        # This should not happen, but we add this as a safeguard to ensure that the method always returns an instance.
-        error_template = "Failed to create singleton instance for {}. Current singletons: {}"
-        raise RuntimeError(error_template.format(cls.__name__, list(cls._type_instances.keys())))
+        return cls._type_instances[cls]

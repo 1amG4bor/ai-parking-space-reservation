@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from sqlalchemy import Column, Enum, ForeignKey, Table
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, attributes, mapped_column, relationship
 
 from chat_engine.models.base import Base
 from chat_engine.models.enums import FuelType, PreferenceType, ReservationStatus, VehicleType
@@ -39,6 +39,24 @@ class UserEntity(Base):
         "ReservationEntity", back_populates="user", cascade="all, delete-orphan"
     )
 
+    def to_dict(self):
+
+        result = {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email,
+        }
+        state = attributes.instance_state(self)
+        if state.attrs.locations.loaded_value is not attributes.NO_VALUE:
+            result["locations"] = [loc.to_dict() for loc in self.locations]
+        if state.attrs.vehicles.loaded_value is not attributes.NO_VALUE:
+            result["vehicles"] = [v.to_dict() for v in self.vehicles]
+        if state.attrs.preferences.loaded_value is not attributes.NO_VALUE:
+            result["preferences"] = [p.to_dict() for p in self.preferences]
+        if state.attrs.reservations.loaded_value is not attributes.NO_VALUE:
+            result["reservations"] = [r.to_dict() for r in self.reservations]
+        return result
+
 
 class LocationEntity(Base):
     """Entity that represents a location in the database. It has a many-to-one relationship with UserEntity,
@@ -56,7 +74,22 @@ class LocationEntity(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     user: Mapped["UserEntity"] = relationship("UserEntity", back_populates="locations")
 
-    def __repr__(self):
+    def to_dict(self):
+
+        result = {
+            "id": self.id,
+            "country": self.country,
+            "county": self.county,
+            "city": self.city,
+            "zip_code": self.zip_code,
+            "address": self.address,
+            "user_id": self.user_id,
+        }
+        if attributes.instance_state(self).attrs.user.loaded_value is not attributes.NO_VALUE:
+            result["user"] = {"id": self.user.id, "username": self.user.username}
+        return result
+
+    def __str__(self):
         return f"{self.address}, {self.city} {self.zip_code}, {self.county}, {self.country}"
 
 
@@ -76,7 +109,22 @@ class VehicleEntity(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
     user: Mapped["UserEntity"] = relationship("UserEntity", back_populates="vehicles")
 
-    def __repr__(self):
+    def to_dict(self):
+
+        result = {
+            "id": self.id,
+            "type": self.type.value,
+            "model": self.model,
+            "year": self.year,
+            "license_plate": self.license_plate,
+            "fuel_type": self.fuel_type.value,
+            "user_id": self.user_id,
+        }
+        if attributes.instance_state(self).attrs.user.loaded_value is not attributes.NO_VALUE:
+            result["user"] = {"id": self.user.id, "username": self.user.username}
+        return result
+
+    def __str__(self):
         return f"{self.model} - {self.license_plate} | {self.type.value} ({self.fuel_type.value})"
 
 
@@ -105,7 +153,19 @@ class PreferenceEntity(Base):
         back_populates="preferences",
     )
 
-    def __repr__(self):
+    def to_dict(self):
+
+        result = {
+            "id": self.id,
+            "category": self.category,
+            "type": self.type.value,
+            "description": self.description,
+        }
+        if attributes.instance_state(self).attrs.users.loaded_value is not attributes.NO_VALUE:
+            result["users"] = [{"id": u.id, "username": u.username} for u in self.users]
+        return result
+
+    def __str__(self):
         return f"User preference of {self.category} | {self.type.value} - {self.description}"
 
 
@@ -130,8 +190,38 @@ class ReservationEntity(Base):
     vehicle_id: Mapped[int] = mapped_column(ForeignKey("vehicles.id"), nullable=False)
     vehicle: Mapped["VehicleEntity"] = relationship("VehicleEntity")
 
-    def __repr__(self):
+    def __str__(self):
         template = "Reservation {} for parking lot {} from {} to {} with status {}"
         return template.format(
             self.reservation_id, self.parking_lot_id, self.start_time, self.end_time, self.status.value
         )
+
+    def to_dict(self):
+        result = {
+            "reservation_id": self.reservation_id,
+            "reservation_time": self.reservation_time.isoformat() if self.reservation_time else None,
+            "parking_lot_id": self.parking_lot_id,
+            "parking_space_category": self.parking_space_category,
+            "start_time": self.start_time.isoformat(),
+            "end_time": self.end_time.isoformat(),
+            "status": self.status.value,
+            "user_id": self.user_id,
+            "vehicle_id": self.vehicle_id,
+        }
+        # Include relationship data only when already loaded (avoids DetachedInstanceError)
+
+        if attributes.instance_state(self).attrs.user.loaded_value is not attributes.NO_VALUE:
+            result["user"] = {
+                "id": self.user.id,
+                "username": self.user.username,
+                "email": self.user.email,
+            }
+        if attributes.instance_state(self).attrs.vehicle.loaded_value is not attributes.NO_VALUE:
+            result["vehicle"] = {
+                "type": self.vehicle.type.value,
+                "model": self.vehicle.model,
+                "year": self.vehicle.year,
+                "license_plate": self.vehicle.license_plate,
+                "fuel_type": self.vehicle.fuel_type.value,
+            }
+        return result

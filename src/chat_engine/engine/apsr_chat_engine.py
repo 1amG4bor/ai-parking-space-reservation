@@ -1,7 +1,8 @@
 import re
 from types import GeneratorType
 
-from chat_engine.core.agents.agent import ReservationAgent
+from chat_engine.core.agents.agent_models import ApsrSessionContext
+from chat_engine.core.agents.apsr_agent import APSRAgent
 from chat_engine.core.agents.guardrail import ModerationGuardrail
 from chat_engine.core.config.logging import logger
 from chat_engine.core.utils.patterns import Singleton
@@ -9,11 +10,11 @@ from chat_engine.models.response import ChatResponse, ResponseStatus
 
 
 class ChatEngine(metaclass=Singleton):
-    def __init__(self):
-        self.agent = ReservationAgent()
+    def __init__(self, agent: APSRAgent):
+        self.agent = agent
         self._guardrail = ModerationGuardrail()
 
-    def stream_chat(self, prompt: str, history: list[dict], session_context: dict):
+    def stream_chat(self, prompt: str, history: list[dict], session_context: dict | ApsrSessionContext):
         # Placeholder for streaming AI response generation logic
         logger.info(f"Received prompt: '{prompt}' with history of {len(history)-1} message(s).")
         yield ChatResponse(status=ResponseStatus.ANALYZING)

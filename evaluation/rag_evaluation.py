@@ -23,7 +23,7 @@ from ragas.embeddings import LangchainEmbeddingsWrapper
 from ragas.llms import LangchainLLMWrapper
 from ragas.metrics import answer_correctness, answer_relevancy, context_recall, faithfulness
 
-from chat_engine.core.agents.agent import ReservationAgent
+from chat_engine.core.agents.apsr_agent import APSRAgent
 from chat_engine.core.agents.agent_models import ApsrSessionContext
 
 DEFAULT_SESSION_CONTEXT = ApsrSessionContext(
@@ -64,7 +64,7 @@ def run_evaluation(cases: list[EvalCase]):
     ragas_eval_dataset = []
     eval_dataset = []
     for case in cases:
-        agent = ReservationAgent()
+        agent = APSRAgent()
         start_time = time.time()
         response = agent.invoke(prompt=case.user_input, history=[], session_context=DEFAULT_SESSION_CONTEXT)
         end_time = time.time()
