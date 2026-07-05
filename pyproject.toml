@@ -1,6 +1,6 @@
 [project]
 name = "ai-parking-space-reservation"
-version = "0.2.0"
+version = "0.3.0"
 description = "This is an Agentic RAG chatbot that handle parking reservation with AI assistance."
 readme = "README.md"
 requires-python = ">=3.12, <3.14"
@@ -10,6 +10,7 @@ dependencies = [
     "langchain-community>=0.4.1",
     "langchain-core>=1.2.21",
     "langchain-openai>=1.1.12",
+    "mcp>=1.28.1",
     "openai>=2.29.0",
     "openpyxl>=3.1.5",
     "psycopg2-binary>=2.9.11",
