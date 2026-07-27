@@ -4,11 +4,11 @@ from jinja2 import Template
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import InMemorySaver
 
-from chat_engine.core.agents.agent_models import ApsrSessionContext, ReservationAgentState, ReservationDetails
+from chat_engine.core.agents.agent_models import ApsrSessionContext, ReservationDetails
 from chat_engine.core.config.config import ConfigManager
 from chat_engine.core.config.logging import logger
 from chat_engine.core.prompts import RESERVATION_SYSTEM_PROMPT
-from chat_engine.core.utils.agent_tool import database_tool, reservation_persistence_tool, reservation_tool
+from chat_engine.core.utils.agent_tool import database_query_tool, reservation_tool
 
 REFINED_PROMPT_TEMPLATE = Template("""
 Fulfill the user's request based on the provided reservation details. If the request is unclear or incomplete, ask for clarification.
@@ -30,10 +30,9 @@ class ReservationAgent:
         self.agent = create_agent(
             model=self._cfg_manager.get_config("RESERVATION_AGENT_MODEL", "gpt-5-nano"),
             system_prompt=RESERVATION_SYSTEM_PROMPT,
-            tools=[database_tool, reservation_tool, reservation_persistence_tool],
+            tools=[database_query_tool, reservation_tool],
             checkpointer=InMemorySaver(),
             context_schema=ApsrSessionContext,
-            state_schema=ReservationAgentState,
         )
 
     def invoke(

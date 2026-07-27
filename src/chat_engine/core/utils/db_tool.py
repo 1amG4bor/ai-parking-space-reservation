@@ -196,7 +196,7 @@ class DatabaseService(metaclass=Singleton):
 
     def execute_query(self, query: str):
         """Execute a raw SQL query against the database."""
-        if any(keyword in str(query).lower() for keyword in ["delete", "update", "insert"]):
+        if any(keyword in str(query).lower() for keyword in ["delete", "insert"]):
             logger.warning(f"⚠️ Attempt to execute a potentially harmful query: {query}")
             raise ValueError("Only SELECT queries are allowed.")
         try:

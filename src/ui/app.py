@@ -1,6 +1,7 @@
 # pylint: disable=too-many-arguments, too-many-positional-arguments, wrong-import-position
 """This is the DEV UI for testing and development purposes. It is not meant for production use."""
 
+import os
 import traceback
 import warnings
 
@@ -15,7 +16,8 @@ def warn_with_traceback(message, category, filename, lineno, file=None, line=Non
 
 
 # Force all warnings to dump a full stack trace
-warnings.showwarning = warn_with_traceback
+if os.getenv("ENV").lower() == "development" and os.getenv("LOG_LEVEL").lower() == "debug":
+    warnings.showwarning = warn_with_traceback
 
 
 from uuid import uuid4
@@ -45,7 +47,6 @@ if "initialized" not in st.session_state:
     setup_defaults()
 
     # Set authentication context for the session (in a real app, this would come from your auth system)
-    st.session_state.session_context.authenticated = AUTH_CONTEXT["authenticated"]
     st.session_state.session_context.username = AUTH_CONTEXT["username"]
     st.session_state.session_context.thread_id = str(uuid4())  # Unique identifier for the chat session/thread
 

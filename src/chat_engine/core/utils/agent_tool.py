@@ -20,6 +20,20 @@ from chat_engine.models.db_entities import ReservationEntity
 from chat_engine.models.enums import ReservationStatus
 
 
+def _session_field(runtime: ToolRuntime, field: str):
+    """Extract a field from session_context via ToolRuntime state."""
+    state = runtime.state
+    if isinstance(state, dict):
+        sc = state.get("session_context")
+    else:
+        sc = getattr(state, "session_context", None)
+    if sc is None:
+        return None
+    if isinstance(sc, dict):
+        return sc.get(field)
+    return getattr(sc, field, None)
+
+
 @tool
 def user_info_tool(
     tool_call_id: Annotated[str, InjectedToolCallId],
@@ -43,7 +57,7 @@ def user_info_tool(
         - HTTPException: If the user is not authenticated or if there is an error fetching user data from the database.
     """
     logger.info("Getting user preferences.")
-    username = runtime.context.username
+    username = _session_field(runtime, "username")
     if not username:
         return ToolMessage(content="User is not authenticated.", status="error", tool_call_id=tool_call_id)
 
@@ -189,34 +203,194 @@ def websearch_tool(search_query: str, tool_call_id: Annotated[str, InjectedToolC
         )
 
 
+def _classify_reservations(reservations):
+    """Split a list of reservation dicts into pending, booked, completed."""
+    pending = [r for r in reservations if r["status"] == ReservationStatus.PENDING.value.upper()]
+    booked = [r for r in reservations if r["status"] == ReservationStatus.BOOKED.value.upper()]
+    completed = [
+        r
+        for r in reservations
+        if r["status"] in [ReservationStatus.COMPLETED.value.upper(), ReservationStatus.CANCELLED.value.upper()]
+    ]
+    return pending, booked, completed
+
+
+def _summarize_reservations(items):
+    """Format a list of reservation dicts into a short human-readable string."""
+    return "; ".join(
+        f"{r.get('reservation_id')} ({r.get('parking_lot_id')}, {str(r.get('start_time'))} to {str(r.get('end_time'))})"
+        for r in items
+    )
+
+
+def _safe_replace(query, replacements: dict):
+    """Safely replace placeholders in a query string with provided values."""
+    result = query
+    for field, value in replacements.items():
+        result = result.replace(field, str(value) if field in result else result)
+    return result
+
+
+def _format_reservation_content(pending, booked, completed, username):
+    """Build a human-readable summary string for the LLM from categorized reservations."""
+    parts = []
+    if pending:
+        parts.append(f"PENDING ({len(pending)}): {_summarize_reservations(pending)}")
+    if booked:
+        parts.append(f"BOOKED ({len(booked)}): {_summarize_reservations(booked)}")
+    if completed:
+        parts.append(f"COMPLETED/CANCELLED ({len(completed)}): {_summarize_reservations(completed)}")
+    if parts:
+        return f"Reservations for '{username}':\n{'; '.join(parts)}"
+    return f"No reservations found for '{username}'."
+
+
 @tool
-def database_tool(query: str, tool_call_id: Annotated[str, InjectedToolCallId]) -> str:
+def database_query_tool(
+    runtime: ToolRuntime[ApsrSessionContext, Any],
+    tool_call_id: Annotated[str, InjectedToolCallId],
+    action: str,
+    reservation_id: str = None,
+) -> dict:
     """
-    A tool for executing read-only queries on the database to retrieve user information, preferences, and other relevant data for personalized parking space recommendations.
-    **Note**:
-    - The database is postgres with version 15.17; provide queries with the correct syntax and supported features on Postgres 15.17.
-    - This tool is strictly for data retrieval (read-only). **DO NOT** use it to modify, update, or delete any database records.
+    A tool for retrieving or cancelling reservations from the database using prepared actions.
 
     Args:
-        - query (str): A SQL-like query string to retrieve specific information from the database.
+        - action (str): The action to perform. Options:
+            - GET_RESERVATIONS: Fetch ALL reservations (pending, booked, completed, cancelled) for the current user.
+            - CANCEL_RESERVATION: Cancel a pending reservation by reservation_id. Requires `reservation_id`.
+        - reservation_id (str, optional): Required only for CANCEL_RESERVATION.
+        - runtime (ToolRuntime): The runtime context, providing access to the current user's session.
         - tool_call_id (str): The unique identifier for the tool call.
     Returns:
-        - str: The query result as a string, or an error message if the query fails.
+        - Command: Updates the agent state with reservation data and adds a ToolMessage to the conversation.
 
-    Example:
-        - To fetch all parking reservations for a user: `SELECT * FROM reservations WHERE user_id = '12345';`
+    Examples:
+        - action='GET_RESERVATIONS' → fetches all reservations for the logged-in user.
+        - action='CANCEL_RESERVATION', reservation_id='res_hu_0726_1234' → cancels that reservation.
     """
-    logger.info(f"Executing database query: '{query}'")
+    logger.info(f"Executing database query for the action: '{action}'")
+    if action == "CANCEL_RESERVATION" and not reservation_id:
+        return ToolMessage(
+            content="Reservation ID is required to cancel a reservation. Please provide a valid reservation ID.",
+            status="error",
+            tool_call_id=tool_call_id,
+        )
+
+    query_template = ""
+    match action:
+        case "GET_RESERVATIONS":
+            query_template = (
+                "SELECT * FROM reservations r INNER JOIN users u ON r.user_id = u.id WHERE u.username = '<username>';"
+            )
+        case "CANCEL_RESERVATION":
+            query_template = f"UPDATE reservations SET status = 'CANCELLED' WHERE reservation_id = '{reservation_id}';"
+
     try:
         db_service = DatabaseService()
-        executable_query = sqlalchemy.text(query)
-        result = db_service.execute_query(executable_query)
+        username = _session_field(runtime, "username")
+        vehicle_id = _session_field(runtime, "vehicle_id")
+        final_query = _safe_replace(
+            query_template,
+            {"<username>": username, "<vehicle_id>": str(vehicle_id), "<reservation_id>": str(reservation_id)},
+        )
+        result = db_service.execute_query(sqlalchemy.text(final_query))
+        reservations = [item._asdict() for item in result]
+
         logger.info("Database query executed successfully.")
+        pending_reservations, booked_reservations, completed_reservations = _classify_reservations(reservations)
+        if action == "GET_RESERVATIONS":
+            content = _format_reservation_content(
+                pending_reservations, booked_reservations, completed_reservations, username
+            )
+            return Command(
+                update={
+                    "pending_reservations": {r["reservation_id"]: r for r in pending_reservations},
+                    "booked_reservations": {r["reservation_id"]: r for r in booked_reservations},
+                    "completed_reservations": {r["reservation_id"]: r for r in completed_reservations},
+                    "messages": [
+                        ToolMessage(
+                            content=content,
+                            status="success",
+                            tool_call_id=tool_call_id,
+                        )
+                    ],
+                }
+            )
+        if action == "CANCEL_RESERVATION":
+            logger.info(f"Reservation with ID '{reservation_id}' has been cancelled successfully.")
+            return Command(
+                update={
+                    "messages": [
+                        ToolMessage(
+                            content=f"Reservation with ID '{reservation_id}' has been cancelled successfully.",
+                            status="success",
+                            tool_call_id=tool_call_id,
+                        )
+                    ],
+                }
+            )
         return ToolMessage(content=result, status="success", tool_call_id=tool_call_id)
     except Exception as err:
-        logger.warning(f"Database tool failed: {err}")
+        logger.exception(f"Database tool failed: {err}")
         return ToolMessage(
             content=f"Database query failed due to an error: {err}, please try again with a valid query.",
+            status="error",
+            tool_call_id=tool_call_id,
+        )
+
+
+@tool
+def reservation_detail_creation_tool(
+    runtime: ToolRuntime[ApsrSessionContext, Any],
+    tool_call_id: Annotated[str, InjectedToolCallId],
+    parkinglot_id: str,
+    parking_place_category: str,
+    start_time: datetime,
+    end_time: datetime,
+) -> Command:
+    """
+    A tool for creating a new reservation detail object in the internal state.
+    Use this tool to collect all necessary information for a reservation that needs to be submitted later.
+    This tool does not submit the reservation; it only prepares and saves the reservation details in the internal state.
+
+    Args:
+        runtime (ToolRuntime): The runtime context for the tool, providing access to the current user's session and other runtime information.
+        tool_call_id (str): The unique identifier for the tool call.
+        parkinglot_id (str): The ID of the parking lot for the reservation.
+        parking_place_category (str): The category of the parking lot like "Open-air", "Multi-storey", "Ground-level", or "Underground".
+        start_time (datetime): The start time of the parking reservation.
+        end_time (datetime): The end time of the parking reservation.
+
+    Returns:
+        Command: A command to update the internal state with the new reservation details.
+    """
+    logger.info("Creating reservation detail in internal state.")
+    try:
+        reservation_details = ReservationDetails(
+            user_name=_session_field(runtime, "username"),
+            vehicle_id=_session_field(runtime, "vehicle_id"),
+            parking_lot_id=parkinglot_id,
+            parking_space_category=parking_place_category,
+            start_time=start_time,
+            end_time=end_time,
+        )
+        return Command(
+            update={
+                "reservation_details": reservation_details,
+                "messages": [
+                    ToolMessage(
+                        content="Reservation details have been created in the internal state.",
+                        status="success",
+                        tool_call_id=tool_call_id,
+                    )
+                ],
+            }
+        )
+    except Exception as err:
+        logger.warning(f"Failed to create reservation detail: {err}")
+        return ToolMessage(
+            content=f"Failed to create reservation detail due to an error: {err}",
             status="error",
             tool_call_id=tool_call_id,
         )
@@ -226,9 +400,7 @@ def database_tool(query: str, tool_call_id: Annotated[str, InjectedToolCallId]) 
 def reservation_tool(
     runtime: ToolRuntime[ApsrSessionContext, Any],
     tool_call_id: Annotated[str, InjectedToolCallId],
-    parking_lot_id: str,
-    category: str,
-    reservation_time: dict,
+    reservation_details: ReservationDetails,
 ) -> Command | ToolMessage:
     """
     A tool for creating a new parking space reservation in the specified parking lot for the user and time period provided.
@@ -255,11 +427,27 @@ def reservation_tool(
                 - "username" (str): The username of the user who made the reservation.
     """
     logger.info("Reservation tool called.")
-    username = runtime.context.username
-    selected_vehicle_id = runtime.context.vehicle_id
-    logger.info(
-        f"Making reservation for user '{username}' at parking lot {parking_lot_id} ({category}) from {reservation_time['start']} to {reservation_time['end']}"
-    )
+    if not reservation_details:
+        return ToolMessage(
+            content="Reservation details are missing. Please provide the required data to make a reservation.",
+            status="error",
+            tool_call_id=tool_call_id,
+        )
+
+    username = _session_field(runtime, "username")
+    # Silent session detail refinement
+    selected_vehicle_id = _session_field(runtime, "vehicle_id")
+    if username != reservation_details.user_name:
+        reservation_details.user_name = username
+    if selected_vehicle_id != reservation_details.vehicle_id:
+        reservation_details.vehicle_id = selected_vehicle_id
+
+    reservation_fields = ["user_name", "parking_lot_id", "parking_space_category", "start_time", "end_time"]
+    username, parking_lot_id, category, start_time, end_time = [
+        getattr(reservation_details, attr) for attr in reservation_fields
+    ]
+    reservation_msg = "Reservation details: user_name={}, parking_lot_id={}, category={}, start_time={}, end_time={}"
+    logger.info(reservation_msg.format(username, parking_lot_id, category, start_time, end_time))
     try:
         if selected_vehicle_id is None:
             return ToolMessage(
@@ -274,12 +462,12 @@ def reservation_tool(
         seq_id = random.randint(1, 9999)
         reservation_data = ReservationEntity(
             vehicle_id=selected_vehicle_id,
-            reservation_id=f"res_hu_{month}{year}_{seq_id}",
+            reservation_id=f"res_hu_{year}{month:02d}_{seq_id}",
             reservation_time=now,
             parking_lot_id=parking_lot_id,
             parking_space_category=category,
-            start_time=reservation_time["start"],
-            end_time=reservation_time["end"],
+            start_time=start_time,
+            end_time=end_time,
             status=ReservationStatus.PENDING,
         )
 
@@ -293,9 +481,11 @@ def reservation_tool(
             )
 
         logger.info(f"✅ Reservation created successfully for user {username} at parking lot {parking_lot_id}.")
+        updated_reservation_details = {**reservation_data.to_dict(), "user_name": username}
         return Command(
             update={
-                "inactive_reservations": {result["reservation_id"]: result},
+                "reservation_details": updated_reservation_details,
+                "pending_reservations": {**runtime.state.pending_reservations, result["reservation_id"]: result},
                 "messages": [
                     ToolMessage(
                         content=f"Reservation created successfully with the id of: {result['reservation_id']}",
@@ -328,8 +518,8 @@ def reservation_persistence_tool(
         reservation_data (ReservationDetails): The reservation details to be persisted.
         status (str): The status of the reservation.
     """
-    username = runtime.context.username
-    selected_vehicle_id = runtime.context.vehicle_id
+    username = _session_field(runtime, "username")
+    selected_vehicle_id = _session_field(runtime, "vehicle_id")
 
     try:
         result = save_reservation_snapshot_via_mcp(

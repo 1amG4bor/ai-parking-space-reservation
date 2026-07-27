@@ -1,6 +1,6 @@
 [project]
 name = "ai-parking-space-reservation"
-version = "0.3.0"
+version = "0.4.0"
 description = "This is an Agentic RAG chatbot that handle parking reservation with AI assistance."
 readme = "README.md"
 requires-python = ">=3.12, <3.14"
@@ -68,6 +68,9 @@ profile = "black"
 [tool.pylint]
 py-version = 3.13
 max-line-length = 120
+max-args = 8
+max-positional-arguments = 6
+max-locals = 20
 source-roots = ["src"]
 disable = [
     "C0114",  # missing-module-docstring
@@ -76,4 +79,5 @@ disable = [
     "R0903",  # too-few-public-methods (for data classes)
     "W1203",  # use f-string in logging
     "W0718",  # broad-exception-caught
+    "W1202",  # use % formatting in logging
 ]
