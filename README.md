@@ -74,6 +74,8 @@ _The architecture contains the following components._
     - **Populate SQL db** - Populate the SQL database with dynamic data that can be used in the Agentic RAG system. The script initializes the database and creates all the db tables, and then populates the tables with sample data.
     - **Semantic search eval** - Evaluate the retrieval performance of the system by running semantic search on the vector database to find relevant documents based on a query and top_k config.
     - **RAG evaluation** - Evaluate the full RAG system and assess both the retrieval and the generation components. The evaluation results are saved into an Excel sheet to the project's root folder.
+5. **LangGraph workflow**  - Composition of AI components to create a workflow that can be executed by the LangGraph engine. 
+6. **Admin UI**  - The admin panel is a web-based interface that allows administrators to manage and monitor the reservations. The interactive dashboard makes it easy for administrators to view reservation details, and accept or reject them.
 
 ---
 ## Contributing 🤝
@@ -82,15 +84,17 @@ _The architecture contains the following components._
 
 ### Utility scripts
 
-Quality assurance
+**Quality assurance**
 - Running the linter: `uv run linter`
 - Formatting the code: `uv run code_format`
 - Running the unittests: `uv run unit_test`
 - Running pre commit checks: `uv run pre_commit` _(includes formatting and linting the code then running unit tests)_
-Running the application
+
+**Running the application**
 - Start/Run the backend services: `uv run backend`
 - Start/Run the frontend (Streamlit UI): `uv run app`
-Running the evaluation scripts
+
+**Running the evaluation scripts**
 - Running the performance evaluation script: `uv run performance_test`
 - Running the accuracy evaluation script: `uv run accuracy_test`
 
@@ -98,11 +102,17 @@ Running the evaluation scripts
 
 The `src` folder contains the following packages and modules.
 
+- `admin_ui`: implementation of the Streamlit UI for the admin panel.
+    - app: the main Streamlit app that handles the user interactions.
+    - css: contains styling for the admin UI.
+    - ui: hold the base UI components displayed on the admin UI.
+    - utils: utility functions and helper components used across the admin UI.
 - `chat_engine`: implementation of the agentic RAG system.
     - `core`: contains the core components of the RAG system.
         - `agents`: contains different agents and their utilities used by the whole system.<br>
         It includes agent models, toolds, middlewares, and guardrail components.
         - `config`: common configuration files, constants, and logger setup.
+        - `graph`: contains the graph implementation of the agentic RAG system
         - `rag`: components related to the retrieval parts of the Retrieval-Augmented Generation system.
         - `utils`: utility functions and helper components used across the whole system.
     - `engine`: contains the chat_engine and relevant components controlling the interaction with Agent.
@@ -115,8 +125,13 @@ The `src` folder contains the following packages and modules.
 **Additional folders**:
 - `cicd`: contain scripts for quality assurance checks and deployment.
 - `data`: contain static and dynamic test data to support the development and testing of the system.
+- `data/reservations`: contains the locally stored reservation data persisted by the MCP tool. 
 - `evaluation`: contains scripts for pre-development, testing, and evaluating the performance of the system.
 - `tests`: contains unit tests for the different components and modules of the system.
+
+### Langgraph Workflow representation
+
+![LangGraph Workflow](workflow-dia.jpg)
 
 
 ---

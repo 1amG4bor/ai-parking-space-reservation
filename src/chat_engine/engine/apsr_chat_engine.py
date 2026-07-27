@@ -1,52 +1,81 @@
-import re
-from types import GeneratorType
+from langgraph.graph.state import CompiledStateGraph
+from langgraph.types import Command
 
-from chat_engine.core.agents.agent_models import ApsrSessionContext
-from chat_engine.core.agents.apsr_agent import APSRAgent
-from chat_engine.core.agents.guardrail import ModerationGuardrail
+from chat_engine.core.agents.agent_models import ApsrSessionContext, APSRState
 from chat_engine.core.config.logging import logger
+from chat_engine.core.graph.workflow import build_state_graph
 from chat_engine.core.utils.patterns import Singleton
 from chat_engine.models.response import ChatResponse, ResponseStatus
 
+_INTERRUPT_KEY = "__interrupt__"
+
 
 class ChatEngine(metaclass=Singleton):
-    def __init__(self, agent: APSRAgent):
-        self.agent = agent
-        self._guardrail = ModerationGuardrail()
+    def __init__(self):
+        self._graph: CompiledStateGraph | None = None
+        self._resume_threads: set[str] = set()
 
-    def stream_chat(self, prompt: str, history: list[dict], session_context: dict | ApsrSessionContext):
-        # Placeholder for streaming AI response generation logic
+    def _get_graph(self) -> CompiledStateGraph:
+        if self._graph is None:
+            self._graph = build_state_graph()
+        return self._graph
+
+    # pylint: disable=too-many-branches
+    def stream_chat(self, prompt: str, history: list[dict], session_context: ApsrSessionContext):
         logger.info(f"Received prompt: '{prompt}' with history of {len(history)-1} message(s).")
-        yield ChatResponse(status=ResponseStatus.ANALYZING)
 
-        # Run guardrail checks on the prompt before processing
-        guardrail_response = self._guardrail.validate(prompt)
-        if guardrail_response.get("blocked"):
-            template = "Sorry, we cannot process your request because: '{}'.\n**Suggestion:**\n{}"
-            suggestions = "\n".join(guardrail_response.get("suggestions", []))
-            error_message = template.format(guardrail_response.get("reason"), suggestions)
+        thread_id = session_context.thread_id or "default"
+        config = {"configurable": {"thread_id": thread_id}}
+        graph = self._get_graph()
 
-            yield ChatResponse(content=error_message, status=ResponseStatus.BLOCKED)
-            return
-
-        yield ChatResponse(status=ResponseStatus.SEARCHING)
-
-        stream_response = self.agent.invoke(prompt=prompt, history=history, session_context=session_context)
+        if thread_id in self._resume_threads:
+            # Continue the previously interrupted graph execution that was waiting for user input to continue.
+            logger.info("Resuming thread %s with user input.", thread_id)
+            self._resume_threads.discard(thread_id)
+            yield ChatResponse(status=ResponseStatus.SEARCHING)
+            try:
+                result = graph.invoke(Command(resume=prompt), config)
+            except Exception:
+                logger.exception("Graph execution failed on resume")
+                raise
+        else:
+            history.append({"role": "user", "content": prompt})
+            yield ChatResponse(status=ResponseStatus.SEARCHING)
+            try:
+                result = graph.invoke(input={"messages": history, "session_context": session_context}, config=config)
+            except Exception:
+                logger.exception("Graph execution failed")
+                raise
 
         logger.info("Response is ready to be streamed.")
-        if isinstance(stream_response, str):
-            # Mimic streaming processing by yielding one chunk at a time.
-            splitted_response = re.split(r"(?=[\s,.!?])", stream_response)
-            for chunk in splitted_response:
-                yield ChatResponse(content=chunk, status=ResponseStatus.STREAMING)
-        elif isinstance(stream_response, list):
-            for item in stream_response:
-                yield ChatResponse(content=str(item), status=ResponseStatus.GENERATING)
-        elif isinstance(stream_response, GeneratorType):
-            yield ChatResponse(content=stream_response, status=ResponseStatus.STREAMING)
-        else:
-            yield ChatResponse(content=stream_response, status=ResponseStatus.GENERATING)
 
-        # Indicate completion of the response stream
+        interrupts = result.get(_INTERRUPT_KEY) if isinstance(result, dict) else None
+        if interrupts:
+            interrupt_value = interrupts[0].value
+            if isinstance(interrupt_value, dict):
+                msg = interrupt_value.get("message", str(interrupt_value))
+            else:
+                msg = str(interrupt_value)
+            self._resume_threads.add(thread_id)
+            logger.info("Graph interrupted, waiting for user input on thread %s.", thread_id)
+            yield ChatResponse(content=msg, status=ResponseStatus.AWAITING_INPUT)
+            return
+
+        if isinstance(result, dict):
+            messages = result.get("messages", [])
+        elif isinstance(result, APSRState):
+            messages = result.messages
+        else:
+            messages = []
+
+        if messages:
+            last_msg = messages[-1]
+            content = getattr(last_msg, "content", str(last_msg))
+        else:
+            content = str(result)
+
+        if content:
+            yield ChatResponse(content=content, status=ResponseStatus.STREAMING)
+
         logger.info("Request processing completed.")
         yield ChatResponse(status=ResponseStatus.STOP)

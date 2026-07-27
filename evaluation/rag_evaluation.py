@@ -27,7 +27,6 @@ from chat_engine.core.agents.apsr_agent import APSRAgent
 from chat_engine.core.agents.agent_models import ApsrSessionContext
 
 DEFAULT_SESSION_CONTEXT = ApsrSessionContext(
-    authenticated=True,
     username="john.doe",
     thread_id="eval-01",
     vehicle_id=1,

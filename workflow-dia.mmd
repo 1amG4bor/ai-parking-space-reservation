@@ -1,0 +1,34 @@
+flowchart TD
+    START((START)) --> guardrail[🛡️ guardrail_node]
+    guardrail -->|"blocked"| block[🚫 block_node]
+    guardrail -->|"passed"| intent[🧠 user_intent_classifier_node]
+    intent --> router[🔀 usecase_router]
+
+    router -->|"search"| search[🔍 search_node]
+    router -->|"get_reservation_info"| res_info[📋 reservation_info_node]
+    router -->|"user_input"| hitl[💬 user_input_node\nHITL interrupt]
+    router -->|"submit_reservation"| res_mgmt[📝 reservation_management_node]
+    router -->|"synthesizer"| synth[✨ synthesizer_node]
+    router -->|"block"| block
+
+    search --> router
+    res_info --> router
+    hitl --> guardrail
+
+    res_mgmt --> persist[💾 reservation_persistence_node]
+    persist --> synth
+
+    block --> END((END))
+    synth --> END((END))
+
+    subgraph SubAgents["Sub-Agents (create_react_agent)"]
+        search -.-> search_agent["search_agent\ntools: user_info, retriever,\nwebsearch"]
+        res_info -.-> info_agent["reservation_info_agent\ntools: database_query,\nreservation_detail_creation"]
+        res_mgmt -.-> mgmt_agent["reservation_management_agent\ntools: reservation_tool,\ndatabase_query"]
+    end
+
+    subgraph Edges["Edge Conditions"]
+        router_sem[🔀 router_semaphore\nreads state.next_step]
+    end
+
+    router -.-> router_sem

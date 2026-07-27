@@ -7,16 +7,16 @@ class ResponseStatus(Enum):
     """Enum representing the status of the AI response, which indicates the next step that the UI should take."""
 
     ANALYZING = "Analyzing the request..."
-    BLOCKED = "Your query was blocked by guardrails."
     SEARCHING = "Finding the best parking options..."
     REQUEST = "Please provide additional information."
     CONFIRMATION = "Could you please confirm your reservation details?"
     GENERATING = "Generating the response..."
     STREAMING = "Streaming the response..."
+    AWAITING_INPUT = "Awaiting user input..."
     STOP = "Conversation finished."
 
 
-HUMAN_IN_THE_LOOP_STATUSES = {ResponseStatus.REQUEST, ResponseStatus.CONFIRMATION}
+HUMAN_IN_THE_LOOP_STATUSES = {ResponseStatus.REQUEST, ResponseStatus.CONFIRMATION, ResponseStatus.AWAITING_INPUT}
 
 
 class ChatResponse(BaseModel):
