@@ -215,8 +215,8 @@ def user_input_node(state: APSRState) -> dict:
     except Exception as e:
         logger.exception(f"Failed to summarize the user's response: {e}")
         raise e
-    
-    
+
+
 # ==================== Module-level sub-agents ====================
 _search_agent = create_react_agent(
     model=ChatOpenAI(model="gpt-4o-mini", temperature=0),
